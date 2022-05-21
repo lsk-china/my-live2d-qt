@@ -75,7 +75,11 @@ Live2D::Live2D(QWidget *parent)
     connect(wankoAction, &QAction::triggered, this, [this](){
         this->setHtml(this->makeHtml("wanko"));
     });
-
+    QAction *kazuhaAction = new QAction("kazuha",this);
+    kazuhaAction->setCheckable(true);
+    connect(kazuhaAction, &QAction::triggered, this, [this](){
+        this->setHtml(this->makeHtml("kazuha"));
+    });
     QMenu *modelMenu = new QMenu("切换模型", this);
     modelMenu->setIcon(QIcon::fromTheme("view-refresh-symbolic"));
     modelMenu->addAction(shizukuAction);
@@ -88,6 +92,7 @@ Live2D::Live2D(QWidget *parent)
     modelMenu->addAction(epsilon2_1Action);
     modelMenu->addAction(hibikiAction);
     modelMenu->addAction(wankoAction);
+    modelMenu->addAction(kazuhaAction);
 
     QActionGroup *modelGroup = new QActionGroup(modelMenu);
     modelGroup->setExclusive(true);
@@ -101,6 +106,7 @@ Live2D::Live2D(QWidget *parent)
     modelGroup->addAction(epsilon2_1Action);
     modelGroup->addAction(hibikiAction);
     modelGroup->addAction(wankoAction);
+    modelGroup->addAction(kazuhaAction);
 
     QAction *quitAction = new QAction("退出", this);
     quitAction->setIcon(QIcon::fromTheme("application-exit"));
@@ -296,6 +302,8 @@ QString Live2D::makeHtml(QString modelname)
                           "'opacityDefault': 1,"
                           "'opacityOnHover': 1"
                         "}";
+    else if(modelname == "kazuha")
+        return "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><script src=\"bundle.js\"></script><script src=\"live2dcubismcore.js\"></script></head><body><canvas id=\"live2d\" width=\"500\" height=\"500\"></canvas><script>initDefine(\"/live2d/\", \"\", [\"WY6\"])</script></body></html>";
     else
         modelConfig =   "'model': {"
                           "'jsonPath': \"https://cdn.jsdelivr.net/npm/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json\""
