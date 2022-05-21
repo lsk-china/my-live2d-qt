@@ -3,17 +3,28 @@
 Live2D::Live2D(QWidget *parent)
     : QWebEngineView(parent)
 {
+    QList<QScreen *> screens = QGuiApplication::screens();
+    if (screens.size() > 1) {
+        this->setGeometry(screens.at(1)->geometry());
+    } else {
     // 窗口属性
-    this->setGeometry(0, 0,
-                      QApplication::desktop()->width(),
-                      QApplication::desktop()->height());
+     this->setGeometry(0, 0,
+                       QApplication::desktop()->width(),
+                       QApplication::desktop()->height());
+
+    }
+
     this->setWindowOpacity(1);
     this->setWindowFlags(Qt::FramelessWindowHint
                          |Qt::WindowStaysOnTopHint
                          |Qt::Tool);
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setAttribute(Qt::WA_TransparentForMouseEvents);
-
+    const QRect screenRect = this->geometry();
+    canvasRect = new QRect(screenRect.height() - 300,
+                           0,
+                           300,
+                           300);
     // 利用X11接口穿透鼠标事件，使其不影响正常操作
     XShapeCombineRectangles(QX11Info::display(),
                             this->winId(),
@@ -21,7 +32,7 @@ Live2D::Live2D(QWidget *parent)
     this->page()->setBackgroundColor(Qt::transparent);
 
     // 默认加载model
-    this->setHtml(this->makeHtml("shizuku"));
+    this->setHtml(this->makeHtml("kazuha"));
 
     // 托盘图标右键菜单
     QAction *shizukuAction = new QAction("shizuku", this);
@@ -303,7 +314,7 @@ QString Live2D::makeHtml(QString modelname)
                           "'opacityOnHover': 1"
                         "}";
     else if(modelname == "kazuha")
-        return "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><script src=\"bundle.js\"></script><script src=\"live2dcubismcore.js\"></script></head><body><canvas id=\"live2d\" width=\"500\" height=\"500\"></canvas><script>initDefine(\"/live2d/\", \"\", [\"WY6\"])</script></body></html>";
+        return "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>canvas {position: fixed; bottom: 0; left: 0;}</style><script src=\"http://localhost:9000/bundle.js\"></script><script src=\"http://localhost:9000/live2dcubismcore.js\"></script></head><body><canvas id=\"live2d\" width=\"300\" height=\"300\"></canvas><script>initDefine(\"http://localhost:9000/live2d/\", \"\", [\"WY6\"])</script></body></html>";
     else
         modelConfig =   "'model': {"
                           "'jsonPath': \"https://cdn.jsdelivr.net/npm/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json\""
@@ -336,4 +347,15 @@ QString Live2D::makeHtml(QString modelname)
   "</body>"
 "</html>";
     return html;
+}
+
+void Live2D::mouseMoveEvent(QMouseEvent *e) {
+    qDebug("MouseMove\r\n");
+    QPoint cursor = e->pos();
+    if (canvasRect->contains(cursor) && this->page()->isVisible()) {
+        this->page()->setVisible(false);
+    } else {
+        this->page()->setVisible(true);
+    }
+
 }
