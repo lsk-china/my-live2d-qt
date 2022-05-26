@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets webenginewidgets x11extras
 
-LIBS += -lX11 -lXext
+LIBS += -lX11 -lXext -lXi
 
 TARGET = Live2D
 TEMPLATE = app
@@ -28,10 +28,12 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        live2d.cpp
+        live2d.cpp \
+        mouseEventThread.cpp
 
 HEADERS += \
-        live2d.h
+        live2d.h \
+        mouseEventThread.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

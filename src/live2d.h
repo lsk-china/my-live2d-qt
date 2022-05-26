@@ -12,6 +12,7 @@
 #include <X11/extensions/shape.h>
 #include <QMouseEvent>
 #include <QRect>
+#include "mouseEventThread.h"
 
 class Live2D : public QWebEngineView
 {
@@ -21,10 +22,10 @@ public:
 
 private:
     QString makeHtml(QString modelname);
-    QRect *canvasRect;
 
-protected:
-    void mouseMoveEvent(QMouseEvent *e);
+public slots:
+    void mouseEnter();
+    void mouseLeave();
 };
 
 #endif // LIVE2D_H

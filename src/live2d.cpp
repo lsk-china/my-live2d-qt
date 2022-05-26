@@ -20,11 +20,6 @@ Live2D::Live2D(QWidget *parent)
                          |Qt::Tool);
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setAttribute(Qt::WA_TransparentForMouseEvents);
-    const QRect screenRect = this->geometry();
-    canvasRect = new QRect(screenRect.height() - 300,
-                           0,
-                           300,
-                           300);
     // 利用X11接口穿透鼠标事件，使其不影响正常操作
     XShapeCombineRectangles(QX11Info::display(),
                             this->winId(),
@@ -147,8 +142,12 @@ Live2D::Live2D(QWidget *parent)
     });
     trayIcon->setVisible(true);
     trayIcon->show();
-}
 
+    MouseEventThread *th = new MouseEventThread(this->geometry(), this);
+    connect(th, SIGNAL(mouseEnter()), this, SLOT(mouseLeave()), Qt::QueuedConnection);
+    connect(th, SIGNAL(mouseLeave()), this, SLOT(mouseLeave()), Qt::QueuedConnection);
+    th->start();
+}
 // 切换model时用到的html
 QString Live2D::makeHtml(QString modelname)
 {
@@ -349,13 +348,14 @@ QString Live2D::makeHtml(QString modelname)
     return html;
 }
 
-void Live2D::mouseMoveEvent(QMouseEvent *e) {
-    qDebug("MouseMove\r\n");
-    QPoint cursor = e->pos();
-    if (canvasRect->contains(cursor) && this->page()->isVisible()) {
-        this->page()->setVisible(false);
-    } else {
-        this->page()->setVisible(true);
-    }
+//void Live2D::myMouseEvent(bool shouldHide) {
+//    this->page()->setVisible(!shouldHide);
+//}
 
+void Live2D::mouseEnter() {
+    this->page()->setVisible(false);
+}
+
+void Live2D::mouseLeave() {
+    this->page()->setVisible(false);
 }
