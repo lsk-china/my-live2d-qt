@@ -16,7 +16,7 @@ public:
     ~MouseEventThread();
 private:
     void run();
-    Display *display = QX11Info::display();
+    Display *display = XOpenDisplay(0);
     Window rootWindow;
     int xi_opcode;
     QRect *canvasRect;
