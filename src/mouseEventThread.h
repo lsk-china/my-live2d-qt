@@ -8,11 +8,14 @@
 #include <X11/extensions/XInput2.h>
 #include <QRect>
 #include <QPoint>
+#include <iostream>
+
+using namespace std;
 
 class MouseEventThread : public QThread {
     Q_OBJECT
 public:
-    MouseEventThread(QRect screenRect, QObject *parent = nullptr);
+    MouseEventThread(QRect screenRect, int winID, QObject *parent = nullptr);
     ~MouseEventThread();
 private:
     void run();
@@ -20,9 +23,11 @@ private:
     Window rootWindow;
     int xi_opcode;
     QRect *canvasRect;
+    Window appWindow;
 signals:
     void mouseEnter();
     void mouseLeave();
+    void mouseEvent(QPoint relPosition, QPoint absPosition);
 };
 
 

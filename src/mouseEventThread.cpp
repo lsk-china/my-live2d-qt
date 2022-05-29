@@ -1,6 +1,6 @@
 #include "mouseEventThread.h"
 
-MouseEventThread::MouseEventThread(QRect screenRect, QObject *parent) : QThread(parent) {
+MouseEventThread::MouseEventThread(QRect screenRect, int winID, QObject *parent) : QThread(parent) {
     rootWindow = XRootWindow(display, 0);
     int event, error;
     XQueryExtension(display, "XInputExtension", &xi_opcode, &event, &error);
@@ -15,6 +15,7 @@ MouseEventThread::MouseEventThread(QRect screenRect, QObject *parent) : QThread(
                            0,
                            300,
                            300);
+    this->appWindow = (Window) winID;
 }
 
 void MouseEventThread::run() {
@@ -41,22 +42,19 @@ void MouseEventThread::run() {
         if (!retval) {
             continue;
         }
-        Window appWindow = QX11Info::appRootWindow();
-        if (!(appWindow == child_return)) {
-            continue;
-        }
         int local_x, local_y;
-        XTranslateCoordinates(display, rootWindow, child_return,
+        XTranslateCoordinates(display, rootWindow, appWindow,
                               root_x_return, root_y_return,
                               &local_x, &local_y, &child_return);
-        qDebug("Mouse: %d, %d", local_x, local_y);
         QPoint cursorPoint(local_x, local_y);
-        if (canvasRect->contains(cursorPoint)) {
-            emit mouseEnter();
-        } else {
-            emit mouseLeave();
-        }
-        QThread::sleep(100);
+        QPoint absPosition(root_x_return, root_y_return);
+//        if (canvasRect->contains(cursorPoint)) {
+//            emit mouseEnter();
+//        } else {
+//            emit mouseLeave();
+//        }
+        emit mouseEvent(cursorPoint, absPosition);
+        QThread::msleep(100);
     }
 }
 

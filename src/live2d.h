@@ -13,6 +13,8 @@
 #include <QMouseEvent>
 #include <QRect>
 #include "mouseEventThread.h"
+#include <QDebug>
+#include <QEvent>
 
 class Live2D : public QWebEngineView
 {
@@ -26,6 +28,7 @@ private:
 public slots:
     void mouseEnter();
     void mouseLeave();
+    void mouseEvent(QPoint relPosition, QPoint absPosition);
 };
 
 #endif // LIVE2D_H

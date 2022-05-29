@@ -143,9 +143,10 @@ Live2D::Live2D(QWidget *parent)
     trayIcon->setVisible(true);
     trayIcon->show();
 
-    MouseEventThread *th = new MouseEventThread(this->geometry(), this);
+    MouseEventThread *th = new MouseEventThread(this->geometry(), this->winId(), this);
     connect(th, SIGNAL(mouseEnter()), this, SLOT(mouseLeave()), Qt::QueuedConnection);
     connect(th, SIGNAL(mouseLeave()), this, SLOT(mouseLeave()), Qt::QueuedConnection);
+    connect(th, SIGNAL(mouseEvent(QPoint, QPoint)), this, SLOT(mouseEvent(QPoint, QPoint)), Qt::QueuedConnection);
     th->start();
 }
 // 切换model时用到的html
@@ -358,4 +359,27 @@ void Live2D::mouseEnter() {
 
 void Live2D::mouseLeave() {
     this->page()->setVisible(false);
+}
+
+void Live2D::mouseEvent(QPoint relPosition, QPoint absPosition) {
+    const int x = relPosition.x();
+    const int y = relPosition.y();
+    const int yMin = this->geometry().height() - 300;
+    const int yMax = this->geometry().height();
+    if ((x >= 0) && (x <= 300) && (y >= yMin) && (y <= yMax)) {
+        if (!this->isHidden()) {
+            this->hide();
+        }
+    } else {
+        if (this->isHidden()) {
+            this->show();
+        }
+        QMouseEvent *mouseEvent = new QMouseEvent(QEvent::MouseMove,
+                                                  relPosition,
+                                                  absPosition,
+                                                  Qt::MouseButton::NoButton,
+                                                  Qt::MouseButton::NoButton,
+                                                  Qt::KeyboardModifier::NoModifier);
+        this->event(mouseEvent);
+    }
 }
