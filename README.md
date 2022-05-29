@@ -20,6 +20,7 @@
 * 添加万叶的Live2D V3 模型
 * 在新的线程里面通过X11 XInput监听鼠标事件 实现当鼠标滑动到模型上方时隐藏模型
 * 通过上面的方法 使模型能够和鼠标交互
+* 使用Live2D Cubism Framework Native 重构（？
 
 # 借物表
 * 万叶的模型来自 [Bilibili](https://www.bilibili.com/video/BV1xq4y1k7QR)

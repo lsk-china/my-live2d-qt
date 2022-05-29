@@ -380,6 +380,6 @@ void Live2D::mouseEvent(QPoint relPosition, QPoint absPosition) {
                                                   Qt::MouseButton::NoButton,
                                                   Qt::MouseButton::NoButton,
                                                   Qt::KeyboardModifier::NoModifier);
-        this->event(mouseEvent);
+        this->page()->event(mouseEvent);
     }
 }
