@@ -54,7 +54,7 @@ void MouseEventThread::run() {
 //            emit mouseLeave();
 //        }
         emit mouseEvent(cursorPoint, absPosition);
-        QThread::msleep(100);
+        QThread::msleep(50);
     }
 }
 

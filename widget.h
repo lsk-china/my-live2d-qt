@@ -5,6 +5,8 @@
 #ifndef QDESKTOPPET_2_CMAKE_WIDGET_H
 #define QDESKTOPPET_2_CMAKE_WIDGET_H
 
+#define QCOREEVENT_H
+
 #include <QWidget>
 #include "QLive2dWidget.hpp"
 #include <QApplication>
@@ -12,11 +14,10 @@
 #include <X11/extensions/shape.h>
 #include <QtX11Extras/QX11Info>
 #include <QPoint>
-#include <QEvent>
-#include <QMouseEvent>
 //#include <QDebug>
 #include <iostream>
 #include "mouseEventThread.h"
+
 
 using namespace std;
 

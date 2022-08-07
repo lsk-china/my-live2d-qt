@@ -36,16 +36,16 @@ Widget::~Widget() {
 
 void Widget::live2dInitialized(QLive2dWidget *wid) {
     //wid->setResDir("Resource");
-    wid->setModel("WY6");
+    widget->setModel("WY6");
 }
 void Widget::mouseEvent(QPoint rel, QPoint abs) {
     //cout<<"rel: "<<rel.x()<<", "<<rel.y()<<endl;
     //cout<<"abs: "<<abs.x()<<", "<<abs.y()<<endl;
-    QMouseEvent *mouseEvent = new QMouseEvent(QEvent::MouseMove,
-                                              rel,
-                                              abs,
-                                              Qt::MouseButton::NoButton,
-                                              Qt::MouseButton::NoButton,
-                                              Qt::KeyboardModifier::NoModifier);
-    wid->mouseMove(mouseEvent);
+    widget->mouseMove(rel);
+    if (widget->geometry().contains(rel) && widget->isVisible()) {
+        widget->hide();
+    }
+    if (!widget->geometry().contains(rel) && !widget->isVisible()) {
+        widget->show();
+    }
 }
