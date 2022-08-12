@@ -6,6 +6,7 @@
 #define QDESKTOPPET_2_CMAKE_WIDGET_H
 
 #define QCOREEVENT_H
+#define QACTIONGROUP_H
 
 #include <QWidget>
 #include "QLive2dWidget.hpp"
@@ -17,6 +18,8 @@
 //#include <QDebug>
 #include <iostream>
 #include "mouseEventThread.h"
+#include <QSystemTrayIcon>
+#include <QMenu>
 
 
 using namespace std;
@@ -29,6 +32,9 @@ public:
 private:
     QLive2dWidget *widget;
     MouseEventThread *th;
+    bool initialized = false;
+    bool hideOnHover = true;
+    bool shouldShow = true;
     QPoint transformPoint(QPoint in);
 public slots:
     void live2dInitialized(QLive2dWidget *wid);
