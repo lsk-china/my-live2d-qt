@@ -29,6 +29,7 @@ public:
 private:
     QLive2dWidget *widget;
     MouseEventThread *th;
+    QPoint transformPoint(QPoint in);
 public slots:
     void live2dInitialized(QLive2dWidget *wid);
     void mouseEvent(QPoint rel, QPoint abs);

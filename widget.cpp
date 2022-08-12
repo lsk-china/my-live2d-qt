@@ -34,6 +34,20 @@ Widget::~Widget() {
     delete this->th;
 }
 
+QPoint Widget::transformPoint(QPoint in) {
+    int x = in.x();
+    int y = in.y();
+    if (x > 300) {
+        x = 300;
+    }
+//    y = this->height() - y;
+//    if (y > 300) {
+//        y = 300;
+//    }
+    y = y - 100 < 0 ? y : y - 100;
+    return QPoint(x, y);
+}
+
 void Widget::live2dInitialized(QLive2dWidget *wid) {
     //wid->setResDir("Resource");
     widget->setModel("WY6");
@@ -41,7 +55,7 @@ void Widget::live2dInitialized(QLive2dWidget *wid) {
 void Widget::mouseEvent(QPoint rel, QPoint abs) {
     //cout<<"rel: "<<rel.x()<<", "<<rel.y()<<endl;
     //cout<<"abs: "<<abs.x()<<", "<<abs.y()<<endl;
-    widget->mouseMove(rel);
+    widget->mouseMove(this->transformPoint(rel));
     if (widget->geometry().contains(rel) && widget->isVisible()) {
         widget->hide();
     }
