@@ -25,3 +25,33 @@
 # 借物表
 * 万叶的模型来自 [Bilibili](https://www.bilibili.com/video/BV1xq4y1k7QR)
 
+# V2.0
+
+基本功能已经实现，离release不远了（话说似乎除了我也没人关注这个项目）
+
+变动：
+
+- 弃用占用奇高的QWebEngineView，完全使用基于OpenGL的Live2d Cubism Framework for Native实现
+
+- 鼠标交互（虽然有点傻）
+
+- 可控制鼠标在模型上是否隐藏
+
+  
+
+### 构建
+
+需要：
+
+- libLive2dWidget.a libFramework.a [仓库](https://github.com/lsk-china/QtLive2d)
+
+  注意，这里的Framework是修改过的，不可以用官方提供的替代。
+
+- libLive2DCubismCore.so 到live2d官网可下载
+
+先cmake生成构建目录，把这些库文件放到构建目录里面，把你的模型放到构建目录/Resources下面，把widget.cpp中第87行的模型改成你自己的模型，然后编译运行即可。
+
+### TODO
+
+- 设置资源目录，模型选择
+- 重构代码以支持wayland
