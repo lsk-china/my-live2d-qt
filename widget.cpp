@@ -59,7 +59,7 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
     connect(this->widget, SIGNAL(initialized(QLive2dWidget*)), this, SLOT(live2dInitialized(QLive2dWidget*)));
     // 开启鼠标事件监听线程
     this->th = new MouseEventThread(this->geometry(), this->winId(), this);
-    connect(this->th, SIGNAL(mouseEvent(QPoint, QPoint)), this, SLOT(mouseEvent(QPoint, QPoint)), Qt::QueuedConnection);
+    connect(this->th, SIGNAL(mouseEvent(QPoint,QPoint)), this, SLOT(mouseEvent(QPoint,QPoint)), Qt::QueuedConnection);
     this->th->start();
 }
 
@@ -83,7 +83,7 @@ QPoint Widget::transformPoint(QPoint in) {
 }
 
 void Widget::live2dInitialized(QLive2dWidget *wid) {
-    //wid->setResDir("Resource");
+    wid->setResDir("/data/lsk/live2d/Resources/");
     widget->setModel("WY6");
     this->initialized = true;
 }

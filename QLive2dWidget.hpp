@@ -6,9 +6,7 @@
 #include <QGuiApplication>
 #include <QScreen>
 #include <QList>
-
-// #define QCOREEVENT_H // Mask qcoreevents.h to prevent the confusing errors from qcoreevent.h. What the fuck is happening to the MOC Compiler???
-                     // Mask this header will cause some problems when using qevent. I'll remove it as soon as I find the mistake lead to these errors.
+#include <iostream>
 
 using namespace std;
 
@@ -40,6 +38,7 @@ private slots:
     void updateMotions();
 private:
     void calcRatios();
+    std::string resourceDir = "Resources";
 
 signals:
     void initialized(QLive2dWidget *wid);
