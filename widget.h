@@ -15,11 +15,11 @@
 #include <X11/extensions/shape.h>
 #include <QtX11Extras/QX11Info>
 #include <QPoint>
-//#include <QDebug>
 #include <iostream>
 #include "mouseEventThread.h"
 #include <QSystemTrayIcon>
 #include <QMenu>
+#include <dirent.h>
 
 
 using namespace std;
@@ -35,7 +35,9 @@ private:
     bool initialized = false;
     bool hideOnHover = true;
     bool shouldShow = true;
+    string resourceDir = "/data/lsk/live2d/Resources/";
     QPoint transformPoint(QPoint in);
+    vector<string> listModels();
 public slots:
     void live2dInitialized(QLive2dWidget *wid);
     void mouseEvent(QPoint rel, QPoint abs);

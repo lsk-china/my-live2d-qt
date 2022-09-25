@@ -44,6 +44,8 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
         }
     });
     trayIconMenu->addAction(showAction);
+    QMenu *selectModel = new QMenu("选择模型");
+    trayIconMenu->addMenu(selectModel);
     QAction *quitAction = new QAction("退出", this);
     quitAction->setIcon(QIcon::fromTheme("application-exit"));
     connect(quitAction, &QAction::triggered, this, &QCoreApplication::quit);
@@ -78,12 +80,25 @@ QPoint Widget::transformPoint(QPoint in) {
 //    if (y > 300) {
 //        y = 300;
 //    }
-    y = y - 100 < 0 ? y : y - 100;
+    y = y - 500 < 0 ? y : y - 500;
     return QPoint(x, y);
 }
 
+vector<string> Widget::listModels() {
+    DIR *modelDir = opendir(this->resourceDir.c_str());
+    struct dirent *ptr;
+    vector<string> result;
+    while ((ptr = readdir(modelDir)) != nullptr) {
+        if (ptr->d_type == DT_DIR) {
+            result.push_back(ptr->d_name);
+        }
+    }
+    closedir(modelDir);
+    return result;
+}
+
 void Widget::live2dInitialized(QLive2dWidget *wid) {
-    wid->setResDir("/data/lsk/live2d/Resources/");
+    wid->setResDir(this->resourceDir);
     widget->setModel("WY6");
     this->initialized = true;
 }
@@ -91,6 +106,7 @@ void Widget::mouseEvent(QPoint rel, QPoint abs) {
     //cout<<"rel: "<<rel.x()<<", "<<rel.y()<<endl;
     //cout<<"abs: "<<abs.x()<<", "<<abs.y()<<endl;
     widget->mouseMove(this->transformPoint(rel));
+    //widget->mouseMove(rel);
     if (this->hideOnHover) {
         if (widget->geometry().contains(rel) && widget->isVisible()) {
             widget->hide();
