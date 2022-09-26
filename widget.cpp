@@ -45,6 +45,15 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
     });
     trayIconMenu->addAction(showAction);
     QMenu *selectModel = new QMenu("选择模型");
+    vector<string> models = this->listModels();
+    QList<QAction* > actions;
+    for (int i = 0; i < models.size(); i++) {
+        string modelName = v[i];
+        QAction *action = new QAction(modelName, this);
+        action->setCheckable(true);
+        actions.push_pack(action);
+        
+    }
     trayIconMenu->addMenu(selectModel);
     QAction *quitAction = new QAction("退出", this);
     quitAction->setIcon(QIcon::fromTheme("application-exit"));
