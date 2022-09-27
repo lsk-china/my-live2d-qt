@@ -5,6 +5,8 @@
 #ifndef QDESKTOPPET_2_CMAKE_WIDGET_H
 #define QDESKTOPPET_2_CMAKE_WIDGET_H
 
+// I want to use QActionGroup as a model selector, but there is something wrong with my qt environment and I can't use it...
+
 #define QCOREEVENT_H
 #define QACTIONGROUP_H
 
@@ -21,7 +23,6 @@
 #include <QMenu>
 #include <dirent.h>
 
-
 using namespace std;
 
 class Widget : public QWidget{
@@ -36,7 +37,7 @@ private:
     bool hideOnHover = true;
     bool shouldShow = true;
     string resourceDir = "/data/lsk/live2d/Resources/";
-    QPoint transformPoint(QPoint in);
+    static QPoint transformPoint(QPoint in);
     vector<string> listModels();
 public slots:
     void live2dInitialized(QLive2dWidget *wid);

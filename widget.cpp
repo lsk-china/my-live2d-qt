@@ -22,18 +22,18 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
                             this->winId(),
                             ShapeInput, 0, 0, nullptr, 0, ShapeSet, YXBanded);
     // 菜单初始化
-    QSystemTrayIcon *icon = new QSystemTrayIcon(this);
+    auto *icon = new QSystemTrayIcon(this);
     icon->setToolTip("Live2d");
     icon->setIcon(QIcon::fromTheme("show_table_row"));
-    QMenu *trayIconMenu = new QMenu(this);
-    QAction *enableHideOnHoverAction = new QAction("悬浮隐藏", this);
+    auto *trayIconMenu = new QMenu(this);
+    auto *enableHideOnHoverAction = new QAction("悬浮隐藏", this);
     enableHideOnHoverAction->setCheckable(true);
     enableHideOnHoverAction->setChecked(true);
     connect(enableHideOnHoverAction, &QAction::toggled, this, [this](bool checked) {
        this->hideOnHover = checked;
     });
     trayIconMenu->addAction(enableHideOnHoverAction);
-    QAction *showAction = new QAction("显示", this);
+    auto *showAction = new QAction("显示", this);
     showAction->setCheckable(true);
     showAction->setChecked(true);
     connect(showAction, &QAction::toggled, this, [this](bool checked){
@@ -44,18 +44,7 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
         }
     });
     trayIconMenu->addAction(showAction);
-    QMenu *selectModel = new QMenu("选择模型");
-    vector<string> models = this->listModels();
-    QList<QAction* > actions;
-    for (int i = 0; i < models.size(); i++) {
-        string modelName = v[i];
-        QAction *action = new QAction(modelName, this);
-        action->setCheckable(true);
-        actions.push_pack(action);
-        
-    }
-    trayIconMenu->addMenu(selectModel);
-    QAction *quitAction = new QAction("退出", this);
+    auto *quitAction = new QAction("退出", this);
     quitAction->setIcon(QIcon::fromTheme("application-exit"));
     connect(quitAction, &QAction::triggered, this, &QCoreApplication::quit);
     trayIconMenu->addAction(quitAction);
@@ -90,7 +79,7 @@ QPoint Widget::transformPoint(QPoint in) {
 //        y = 300;
 //    }
     y = y - 500 < 0 ? y : y - 500;
-    return QPoint(x, y);
+    return {x, y};
 }
 
 vector<string> Widget::listModels() {
