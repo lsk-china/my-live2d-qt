@@ -14,6 +14,9 @@ set(PROJECT_SOURCES
         QLive2dWidget.hpp
         mouseEventThread.cpp
         mouseEventThread.h
+        ui_configDialog.h
+        configDialog.cpp
+        configDialog.h
         )
 
 find_package(Qt5 COMPONENTS
@@ -46,5 +49,8 @@ target_sources(QDesktopPet_2_cmake
         widget.h
         mouseEventThread.cpp
         mouseEventThread.h
+        ui_configDialog.h
+        configDialog.cpp
+        configDialog.h
 )
 
