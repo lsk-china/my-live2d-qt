@@ -9,6 +9,7 @@
 
 #define QCOREEVENT_H
 #define QACTIONGROUP_H
+#define QDIR_H
 
 #include <QWidget>
 #include "QLive2dWidget.hpp"
@@ -21,14 +22,14 @@
 #include "mouseEventThread.h"
 #include <QSystemTrayIcon>
 #include <QMenu>
-#include <dirent.h>
+#include "configDialog.h"
 
 using namespace std;
 
 class Widget : public QWidget{
     Q_OBJECT
 public:
-    Widget(QWidget *parent = nullptr);
+    Widget(QWidget *newModelName = nullptr);
     ~Widget();
 private:
     QLive2dWidget *widget;
@@ -36,7 +37,9 @@ private:
     bool initialized = false;
     bool hideOnHover = true;
     bool shouldShow = true;
+    ConfigDialog *configDialog;
     string resourceDir = "/data/lsk/live2d/Resources/";
+    string modelName = "WY6";
     static QPoint transformPoint(QPoint in);
     vector<string> listModels();
 public slots:

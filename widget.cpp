@@ -44,6 +44,18 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
         }
     });
     trayIconMenu->addAction(showAction);
+    this->configDialog = new ConfigDialog;
+    connect(this->configDialog, &ConfigDialog::okPressed, this, [this](const QString& newModelName, const QString& newResourceDir) {
+        this->modelName = newModelName.toStdString();
+        this->resourceDir = newResourceDir.toStdString();
+        this->widget->setResDir(this->resourceDir);
+        this->widget->setModel(this->modelName);
+    });
+    auto *configAction = new QAction("设置", this);
+    connect(configAction, &QAction::toggled, this, [this](bool b) {
+        this->configDialog->showDialog(this, QString::fromStdString(this->modelName), QString::fromStdString(this->resourceDir));
+    });
+    trayIconMenu->addAction(configAction);
     auto *quitAction = new QAction("退出", this);
     quitAction->setIcon(QIcon::fromTheme("application-exit"));
     connect(quitAction, &QAction::triggered, this, &QCoreApplication::quit);
@@ -51,7 +63,6 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
     icon->setContextMenu(trayIconMenu);
     icon->setVisible(true);
     icon->show();
-
     // Live2d组件初始化
     this->widget = new QLive2dWidget(this);
     this->widget->resize(300, 300);
@@ -66,6 +77,10 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
 Widget::~Widget() {
     delete this->widget;
     delete this->th;
+    delete this->configDialog;
+    this->widget = nullptr;
+    this->th = nullptr;
+    this->configDialog = nullptr;
 }
 
 QPoint Widget::transformPoint(QPoint in) {
@@ -88,7 +103,7 @@ vector<string> Widget::listModels() {
     vector<string> result;
     while ((ptr = readdir(modelDir)) != nullptr) {
         if (ptr->d_type == DT_DIR) {
-            result.push_back(ptr->d_name);
+            result.emplace_back(ptr->d_name);
         }
     }
     closedir(modelDir);

@@ -39,7 +39,8 @@ void ConfigDialog::showDialog(QWidget *parent, QString currentModelName, const Q
     for (string model : models) {
         this->ui->comboBox->addItem(modelName);
     }
-
+    this->show();
+    this->exec();
 }
 
 vector<string> ConfigDialog::listModels() {
@@ -53,4 +54,9 @@ vector<string> ConfigDialog::listModels() {
     }
     closedir(modelDir);
     return result;
+}
+
+ConfigDialog::~ConfigDialog() noexcept {
+    delete ui;
+    ui = nullptr;
 }
