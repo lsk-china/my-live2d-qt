@@ -4,25 +4,36 @@
 
 #ifndef QDESKTOPPET_2_CMAKE_WIDGET_H
 #define QDESKTOPPET_2_CMAKE_WIDGET_H
-
-// I want to use QActionGroup as a model selector, but there is something wrong with my qt environment and I can't use it...
-
-#define QCOREEVENT_H
-#define QACTIONGROUP_H
-#define QDIR_H
-
-#include <QWidget>
-#include "QLive2dWidget.hpp"
-#include <QApplication>
-#include <QDesktopWidget>
-#include <X11/extensions/shape.h>
 #include <QtX11Extras/QX11Info>
-#include <QPoint>
-#include <iostream>
+#include "QLive2dWidget.hpp"
 #include "mouseEventThread.h"
-#include <QSystemTrayIcon>
+#include <X11/extensions/shape.h>
+// Undef some marcos to prevent the fucking clash between qt and x.
+#undef Bool
+#undef CursorShape
+#undef Expose
+#undef KeyPress
+#undef KeyRelease
+#undef FocusIn
+#undef FocusOut
+#undef FontChange
+#undef None
+#undef Status
+#undef Unsorted
+#include <QDebug>
+#include <QActionGroup>
+#include <QApplication>
+#include <QGuiApplication>
+#include <QScreen>
+#include <QDesktopWidget>
 #include <QMenu>
-#include "configDialog.h"
+#include <QSystemTrayIcon>
+#include <QMouseEvent>
+#include <QEvent>
+#include <QRect>
+
+
+// #include "configDialog.h"
 
 using namespace std;
 
@@ -31,17 +42,20 @@ class Widget : public QWidget{
 public:
     Widget(QWidget *newModelName = nullptr);
     ~Widget();
+    void setModel(string resourceDir, string modelName);
+    void setWidgetPosition(bool widgetOnLeft);
 private:
     QLive2dWidget *widget;
     MouseEventThread *th;
     bool initialized = false;
     bool hideOnHover = true;
     bool shouldShow = true;
-    ConfigDialog *configDialog;
+//    ConfigDialog *configDialog;
     string resourceDir = "/data/lsk/live2d/Resources/";
     string modelName = "WY6";
-    static QPoint transformPoint(QPoint in);
-    vector<string> listModels();
+    QPoint transformPoint(QPoint in) const;
+    bool widgetOnLeft = true;
+//    vector<string> listModels();
 public slots:
     void live2dInitialized(QLive2dWidget *wid);
     void mouseEvent(QPoint rel, QPoint abs);

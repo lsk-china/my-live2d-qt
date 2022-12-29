@@ -44,18 +44,6 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
         }
     });
     trayIconMenu->addAction(showAction);
-    this->configDialog = new ConfigDialog;
-    connect(this->configDialog, &ConfigDialog::okPressed, this, [this](const QString& newModelName, const QString& newResourceDir) {
-        this->modelName = newModelName.toStdString();
-        this->resourceDir = newResourceDir.toStdString();
-        this->widget->setResDir(this->resourceDir);
-        this->widget->setModel(this->modelName);
-    });
-    auto *configAction = new QAction("设置", this);
-    connect(configAction, &QAction::toggled, this, [this](bool b) {
-        this->configDialog->showDialog(this, QString::fromStdString(this->modelName), QString::fromStdString(this->resourceDir));
-    });
-    trayIconMenu->addAction(configAction);
     auto *quitAction = new QAction("退出", this);
     quitAction->setIcon(QIcon::fromTheme("application-exit"));
     connect(quitAction, &QAction::triggered, this, &QCoreApplication::quit);
@@ -77,42 +65,57 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
 Widget::~Widget() {
     delete this->widget;
     delete this->th;
-    delete this->configDialog;
+//    delete this->configDialog;
     this->widget = nullptr;
     this->th = nullptr;
-    this->configDialog = nullptr;
+//    this->configDialog = nullptr;
 }
 
-QPoint Widget::transformPoint(QPoint in) {
-    int x = in.x();
-    int y = in.y();
-    if (x > 300) {
-        x = 300;
-    }
+QPoint Widget::transformPoint(QPoint in) const {
+    if (this->widgetOnLeft) {
+        int x = in.x();
+        int y = in.y();
+        if (x > 300) {
+            x = 300;
+        }
 //    y = this->height() - y;
 //    if (y > 300) {
 //        y = 300;
 //    }
-    y = y - 500 < 0 ? y : y - 500;
-    return {x, y};
+        y = y - 500 < 0 ? y : y - 500;
+        return {x, y};
+    } else {
+        int x = in.x();
+        int y = in.y();
+//        if (x > 300) {
+//            x = 300;
+//        }
+//    y = this->height() - y;
+//    if (y > 300) {
+//        y = 300;
+//    }
+        y = y - 500 < 0 ? y : y - 500;
+        return {x, y};
+    }
 }
 
-vector<string> Widget::listModels() {
-    DIR *modelDir = opendir(this->resourceDir.c_str());
-    struct dirent *ptr;
-    vector<string> result;
-    while ((ptr = readdir(modelDir)) != nullptr) {
-        if (ptr->d_type == DT_DIR) {
-            result.emplace_back(ptr->d_name);
-        }
-    }
-    closedir(modelDir);
-    return result;
-}
+//vector<string> Widget::listModels() {
+//    DIR *modelDir = opendir(this->resourceDir.c_str());
+//    struct dirent *ptr;
+//    vector<string> result;
+//    while ((ptr = readdir(modelDir)) != nullptr) {
+//        if (ptr->d_type == DT_DIR) {
+//            result.emplace_back(ptr->d_name);
+//        }
+//    }
+//    closedir(modelDir);
+//    return result;
+//}
 
 void Widget::live2dInitialized(QLive2dWidget *wid) {
+    cout << "Starting with model " << this->modelName << " in " << this->resourceDir << "." << endl;
     wid->setResDir(this->resourceDir);
-    widget->setModel("WY6");
+    widget->setModel(this->modelName);
     this->initialized = true;
 }
 void Widget::mouseEvent(QPoint rel, QPoint abs) {
@@ -127,5 +130,16 @@ void Widget::mouseEvent(QPoint rel, QPoint abs) {
         if (!widget->geometry().contains(rel) && !widget->isVisible()) {
             widget->show();
         }
+    }
+}
+
+void Widget::setModel(std::string resourceDir, std::string modelName) {
+    this->resourceDir = resourceDir;
+    this->modelName = modelName;
+}
+
+void Widget::setWidgetPosition(bool widgetOnLeft) {
+    if (!widgetOnLeft) {
+        this->widget->move(this->width() - 300, this->height() - 300);
     }
 }

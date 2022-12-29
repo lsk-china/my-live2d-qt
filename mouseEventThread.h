@@ -5,11 +5,10 @@
 #include <QObject>
 #include <QX11Info>
 //#include <X11/Xlib.h>
-#include <X11/extensions/XInput2.h>
 #include <QRect>
 #include <QPoint>
 #include <iostream>
-
+#include <X11/extensions/XInput2.h>
 using namespace std;
 
 class MouseEventThread : public QThread {
