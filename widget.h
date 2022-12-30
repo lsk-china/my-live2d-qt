@@ -20,6 +20,7 @@
 #undef None
 #undef Status
 #undef Unsorted
+
 #include <QDebug>
 #include <QActionGroup>
 #include <QApplication>
@@ -32,15 +33,14 @@
 #include <QEvent>
 #include <QRect>
 
-
-// #include "configDialog.h"
+#include "configDialog.h"
 
 using namespace std;
 
 class Widget : public QWidget{
     Q_OBJECT
 public:
-    Widget(QWidget *newModelName = nullptr);
+    explicit Widget(QWidget *newModelName = nullptr);
     ~Widget();
     void setModel(string resourceDir, string modelName);
     void setWidgetPosition(bool widgetOnLeft);
@@ -50,7 +50,7 @@ private:
     bool initialized = false;
     bool hideOnHover = true;
     bool shouldShow = true;
-//    ConfigDialog *configDialog;
+    ConfigDialog *configDialog;
     string resourceDir = "/data/lsk/live2d/Resources/";
     string modelName = "WY6";
     QPoint transformPoint(QPoint in) const;
@@ -59,6 +59,7 @@ private:
 public slots:
     void live2dInitialized(QLive2dWidget *wid);
     void mouseEvent(QPoint rel, QPoint abs);
+    void mouseClick(QPoint rel, QPoint abs);
 };
 
 #endif //QDESKTOPPET_2_CMAKE_WIDGET_H

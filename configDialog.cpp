@@ -16,7 +16,7 @@ ConfigDialog::ConfigDialog(QWidget *parent) : QDialog(parent) {
         this->modelName = model;
     });
     connect(this->ui->pushButton_3, &QPushButton::clicked, this, [this]() {
-        this->closeDialog();
+        this->hide();
     });
     connect(this->ui->pushButton, &QPushButton::clicked, this, [this]() {
         this->resourceDir = QFileDialog::getExistingDirectory(this, "Choose resource directory", this->resourceDir);

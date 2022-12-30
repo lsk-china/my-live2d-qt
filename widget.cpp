@@ -44,6 +44,12 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
         }
     });
     trayIconMenu->addAction(showAction);
+    this->configDialog = new ConfigDialog(this);
+    auto *configOption = new QAction("设置", this);
+    connect(configOption, &QAction::toggled, this, [this]() {
+        this->configDialog->show();
+    });
+    trayIconMenu->addAction(configOption);
     auto *quitAction = new QAction("退出", this);
     quitAction->setIcon(QIcon::fromTheme("application-exit"));
     connect(quitAction, &QAction::triggered, this, &QCoreApplication::quit);
@@ -65,10 +71,10 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
 Widget::~Widget() {
     delete this->widget;
     delete this->th;
-//    delete this->configDialog;
+    delete this->configDialog;
     this->widget = nullptr;
     this->th = nullptr;
-//    this->configDialog = nullptr;
+    this->configDialog = nullptr;
 }
 
 QPoint Widget::transformPoint(QPoint in) const {
@@ -142,4 +148,8 @@ void Widget::setWidgetPosition(bool widgetOnLeft) {
     if (!widgetOnLeft) {
         this->widget->move(this->width() - 300, this->height() - 300);
     }
+}
+
+void Widget::mouseClick(QPoint rel, QPoint abs) {
+    qDebug() << "Mouse clicked at: " << abs;
 }
