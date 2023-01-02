@@ -23,6 +23,8 @@ public:
     void setResDir(string resDir);
     void setModel(string model);
     void mouseMove(QPoint rel);
+    void mousePress(QPoint rel);
+    void mouseRelease(QPoint rel);
 
     inline static float ratio;
     inline static float ratio_x = 1;

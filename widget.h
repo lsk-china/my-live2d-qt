@@ -59,7 +59,8 @@ private:
 public slots:
     void live2dInitialized(QLive2dWidget *wid);
     void mouseEvent(QPoint rel, QPoint abs);
-    void mouseClick(QPoint rel, QPoint abs);
+    void mousePress(QPoint rel, QPoint abs);
+    void mouseRelease(QPoint rel, QPoint abs);
 };
 
 #endif //QDESKTOPPET_2_CMAKE_WIDGET_H

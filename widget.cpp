@@ -65,6 +65,8 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
     // 开启鼠标事件监听线程
     this->th = new MouseEventThread(this->geometry(), this->winId(), this);
     connect(this->th, SIGNAL(mouseEvent(QPoint,QPoint)), this, SLOT(mouseEvent(QPoint,QPoint)), Qt::QueuedConnection);
+    connect(this->th, &MouseEventThread::mousePress, this, &Widget::mousePress, Qt::QueuedConnection);
+    connect(this->th, &MouseEventThread::mouseRelease, this, &Widget::mouseRelease, Qt::QueuedConnection);
     this->th->start();
 }
 
@@ -150,6 +152,16 @@ void Widget::setWidgetPosition(bool widgetOnLeft) {
     }
 }
 
-void Widget::mouseClick(QPoint rel, QPoint abs) {
-    qDebug() << "Mouse clicked at: " << abs;
+void Widget::mousePress(QPoint rel, QPoint abs) {
+    qDebug() << "Mouse Press reported";
+    if (this->widget->geometry().contains(rel)) {
+        this->widget->mousePress(transformPoint(rel));
+    }
+}
+
+void Widget::mouseRelease(QPoint rel, QPoint abs) {
+    qDebug() << "Mouse Release reported";
+    if (this->widget->geometry().contains(rel)) {
+        this->widget->mouseRelease(transformPoint(rel));
+    }
 }

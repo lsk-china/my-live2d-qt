@@ -51,7 +51,16 @@
 
 先cmake生成构建目录，把这些库文件放到构建目录里面，把你的模型放到构建目录/Resources下面，把widget.cpp中第87行的模型改成你自己的模型，然后编译运行即可。
 
+### 用法
+./QDesktopPet_2_cmake [resourceDir] [model] [right] <br/>
+resourceDir: 模型文件目录的父目录，必须以/结尾 <br/>
+model: 模型名称 <br/>
+right: 此参数为right则桌宠出现在屏幕右下角，否则出现左下角
+
+
 ### TODO
 
 - 设置资源目录，模型选择
 - 重构代码以支持wayland
+- 配置文件支持
+- 修复桌宠在右下角时鼠标跟踪的问题
