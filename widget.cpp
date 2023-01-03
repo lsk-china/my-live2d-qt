@@ -69,7 +69,7 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
     connect(this->th, &MouseEventThread::mouseRelease, this, &Widget::mouseRelease, Qt::QueuedConnection);
     this->th->start();
 
-    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, [this]() {this->th->exit();})
+    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, [this]() {this->th->exit();});
 }
 
 Widget::~Widget() {
