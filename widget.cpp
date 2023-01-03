@@ -153,19 +153,29 @@ void Widget::setWidgetPosition(bool widgetOnLeft) {
 }
 
 void Widget::mousePress(QPoint rel, QPoint abs) {
-    if (!this->hasFocus() || !this->widget->isVisible()) {
+    if (!this->widget->isVisible()) {
         return;
     }
     if (this->widget->geometry().contains(rel)) {
-        this->widget->mousePress(transformPoint(rel));
+        if (widgetOnLeft) {
+            this->widget->mousePress(QPoint(rel.x(), this->height() - rel.y()));
+        } else {
+            int spaceBetweenLeftAndWidget = this->width() - this->widget->width();
+            this->widget->mousePress(QPoint(rel.x() - spaceBetweenLeftAndWidget, this->height() - rel.y()));
+        }
     }
 }
 
 void Widget::mouseRelease(QPoint rel, QPoint abs) {
-    if (!this->hasFocus() || !this->widget->isVisible()) {
+    if (!this->widget->isVisible()) {
         return;
     }
     if (this->widget->geometry().contains(rel)) {
-        this->widget->mouseRelease(transformPoint(rel));
+        if (widgetOnLeft) {
+            this->widget->mouseRelease(QPoint(rel.x(), this->height() - rel.y()));
+        } else {
+            int spaceBetweenLeftAndWidget = this->width() - this->widget->width();
+            this->widget->mouseRelease(QPoint(rel.x() - spaceBetweenLeftAndWidget, this->height() - rel.y()));
+        }
     }
 }
