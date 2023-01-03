@@ -52,7 +52,7 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
     trayIconMenu->addAction(configOption);
     auto *quitAction = new QAction("退出", this);
     quitAction->setIcon(QIcon::fromTheme("application-exit"));
-    connect(quitAction, &QAction::triggered, this, &QCoreApplication::quit);
+    connect(quitAction, &QAction::triggered, this, &QCoreApplication::quit, Qt::QueuedConnection);
     trayIconMenu->addAction(quitAction);
     icon->setContextMenu(trayIconMenu);
     icon->setVisible(true);
@@ -68,6 +68,8 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
     connect(this->th, &MouseEventThread::mousePress, this, &Widget::mousePress, Qt::QueuedConnection);
     connect(this->th, &MouseEventThread::mouseRelease, this, &Widget::mouseRelease, Qt::QueuedConnection);
     this->th->start();
+
+    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, [this]() {this->th->exit();})
 }
 
 Widget::~Widget() {

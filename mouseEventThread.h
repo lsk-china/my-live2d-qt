@@ -45,8 +45,11 @@ public:
     void processEvent(XRecordInterceptData* hook);
     int queryCursor(int &relX, int &relY, int &absX, int &absY);
 
+public slots:
+    void cleanup();
+
 private:
-    void run();
+    void run() override;
 
     Display *controlDisplay;
     Display *dataDisplay;

@@ -1,29 +1,7 @@
 #include "mouseEventThread.h"
 
 MouseEventThread::MouseEventThread(QRect screenRect, int winID, QObject *parent) : QThread(parent) {
-//    rootWindow = XRootWindow(display, 0);
-//    int event, error;
-//    XQueryExtension(display, "XInputExtension", &xi_opcode, &event, &error);
-//    // unsigned char mask_bytes[(XI_LASTEVENT + 7) / 8] = {0};
-//    // XISetMask(mask_bytes, XI_RawMotion);
-//    // XISetMask(mask_bytes, XI_ButtonPress);
-//    // XISetMask(mask_bytes, XI_ButtonRelease);
-//    // XIEventMask evmasks[1];
-//    // evmasks[0].deviceid = XIAllMasterDevices;
-//    // evmasks[0].mask_len = sizeof(mask_bytes);
-//    // evmasks[0].mask = mask_bytes;
-//    // XISelectEvents(display, rootWindow, evmasks, 2);
-//    XIEventMask mask[1];
-//    XIEventMask *m = &mask[0];
-//    m->deviceid = XIAllDevices;
-//    m->mask_len = XIMaskLen(XI_LASTEVENT);
-//    m->mask = static_cast<unsigned char *>(calloc(m->mask_len, sizeof(char)));
-//    XISetMask(m->mask, XI_ButtonPress);
-//    XISetMask(m->mask, XI_ButtonRelease);
-//    XISetMask(m->mask, XI_Motion);
-//    XISelectEvents(display, rootWindow, mask, 1);
-//    XSync(display, 0);
-//    this->appWindow = (Window) winID;
+    connect(this, &QThread::finished, this, &MouseEventThread::cleanup);
     controlDisplay = XOpenDisplay(NULL);
     rootWindow = XRootWindow(controlDisplay, 0);
     appWindow = winID;
@@ -61,12 +39,8 @@ void MouseEventThread::run() {
     }
 }
 
+
 MouseEventThread::~MouseEventThread() {
-    XRecordDisableContext(controlDisplay, ctx);
-    XRecordFreeContext(controlDisplay, ctx);
-    XFree(rr);
-    XCloseDisplay(controlDisplay);
-    XCloseDisplay(dataDisplay);
 }
 
 void MouseEventThread::callback(XPointer closure, XRecordInterceptData *hook) {
@@ -130,4 +104,20 @@ int MouseEventThread::queryCursor(int &relX, int &relY, int &absX, int &absY) {
     absX = root_x_return;
     absY = root_y_return;
     return 0;
+}
+
+void MouseEventThread::cleanup() {
+    if (ctx) {
+        XRecordDisableContext(controlDisplay, ctx);
+        XRecordFreeContext(controlDisplay, ctx);
+    }
+    if (rr) {
+        XFree(rr);
+    }
+    if (controlDisplay) {
+        XCloseDisplay(controlDisplay);
+    }
+    if (dataDisplay) {
+        XCloseDisplay(dataDisplay);
+    }
 }
