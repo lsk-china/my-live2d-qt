@@ -88,7 +88,6 @@ void MouseEventThread::processEvent(XRecordInterceptData *hook) {
                 if (queryCursor(relX, relY, absX, absY)) {
                     break;
                 }
-                qDebug() << "emit mousePress()";
                 emit mousePress(QPoint(relX, relY), QPoint(absX, absY));
             }
             break;
@@ -97,7 +96,6 @@ void MouseEventThread::processEvent(XRecordInterceptData *hook) {
                 if (queryCursor(relX, relY, absX, absY)) {
                     break;
                 }
-                qDebug() << "emit mouseRelease()";
                 emit mouseRelease(QPoint(relX, relY), QPoint(absX, absY));
             }
             break;

@@ -153,14 +153,18 @@ void Widget::setWidgetPosition(bool widgetOnLeft) {
 }
 
 void Widget::mousePress(QPoint rel, QPoint abs) {
-    qDebug() << "Mouse Press reported";
+    if (!this->hasFocus() || !this->widget->isVisible()) {
+        return;
+    }
     if (this->widget->geometry().contains(rel)) {
         this->widget->mousePress(transformPoint(rel));
     }
 }
 
 void Widget::mouseRelease(QPoint rel, QPoint abs) {
-    qDebug() << "Mouse Release reported";
+    if (!this->hasFocus() || !this->widget->isVisible()) {
+        return;
+    }
     if (this->widget->geometry().contains(rel)) {
         this->widget->mouseRelease(transformPoint(rel));
     }
