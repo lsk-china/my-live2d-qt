@@ -81,34 +81,6 @@ Widget::~Widget() {
     this->configDialog = nullptr;
 }
 
-QPoint Widget::transformPoint(QPoint in) const {
-    if (this->widgetOnLeft) {
-        int x = in.x();
-        int y = in.y();
-        if (x > 300) {
-            x = 300;
-        }
-//    y = this->height() - y;
-//    if (y > 300) {
-//        y = 300;
-//    }
-        y = y - 500 < 0 ? y : y - 500;
-        return {x, y};
-    } else {
-        int x = in.x();
-        int y = in.y();
-//        if (x > 300) {
-//            x = 300;
-//        }
-//    y = this->height() - y;
-//    if (y > 300) {
-//        y = 300;
-//    }
-        y = y - 500 < 0 ? y : y - 500;
-        return {x, y};
-    }
-}
-
 //vector<string> Widget::listModels() {
 //    DIR *modelDir = opendir(this->resourceDir.c_str());
 //    struct dirent *ptr;
@@ -131,7 +103,7 @@ void Widget::live2dInitialized(QLive2dWidget *wid) {
 void Widget::mouseEvent(QPoint rel, QPoint abs) {
     //cout<<"rel: "<<rel.x()<<", "<<rel.y()<<endl;
     //cout<<"abs: "<<abs.x()<<", "<<abs.y()<<endl;
-    widget->mouseMove(this->transformPoint(rel));
+    widget->mouseMove(rel);
     //widget->mouseMove(rel);
     if (this->hideOnHover) {
         if (widget->geometry().contains(rel) && widget->isVisible()) {

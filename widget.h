@@ -53,7 +53,6 @@ private:
     ConfigDialog *configDialog;
     string resourceDir = "/data/lsk/live2d/Resources/";
     string modelName = "WY6";
-    QPoint transformPoint(QPoint in) const;
     bool widgetOnLeft = true;
 //    vector<string> listModels();
 public slots:
