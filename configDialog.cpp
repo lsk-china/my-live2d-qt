@@ -4,16 +4,26 @@
 
 #include "configDialog.h"
 
-ConfigDialog::ConfigDialog(QWidget *parent) : QDialog(parent) {
+#include <utility>
+
+ConfigDialog::ConfigDialog(QString modelNameIn, QString resourceDir, QWidget *parent) : QDialog(parent) {
     this->ui = new Ui::Dialog();
     this->ui->setupUi(this);
+    this->modelName = std::move(modelNameIn);
+    this->resourceDir = std::move(resourceDir);
+    this->ui->label_3->setText(this->resourceDir);
+    vector<string> models = this->listModels();
+    for (string model : models) {
+        this->ui->comboBox->addItem(STQ(model));
+    }
+    this->ui->comboBox->setCurrentText(this->modelName);
     connect(this->ui->pushButton_2, &QPushButton::clicked, this, [this](bool clicked) {
         if (clicked) {
             okPressed(this->modelName, this->resourceDir);
         }
     });
     connect(this->ui->comboBox, &QComboBox::currentTextChanged, this, [this](QString model) {
-        this->modelName = model;
+        this->modelName = std::move(model);
     });
     connect(this->ui->pushButton_3, &QPushButton::clicked, this, [this]() {
         this->hide();
@@ -31,28 +41,15 @@ ConfigDialog::ConfigDialog(QWidget *parent) : QDialog(parent) {
     setAttribute(Qt::WA_DeleteOnClose, false);
 }
 
-void ConfigDialog::showDialog(QWidget *parent, QString currentModelName, const QString& currentResourceDir) {
-    this->resourceDir = currentResourceDir;
-    this->modelName = std::move(currentModelName);
-    this->ui->label_3->setText(currentResourceDir);
-    vector<string> models = this->listModels();
-    for (string model : models) {
-        this->ui->comboBox->addItem(modelName);
-    }
-    this->show();
-    this->exec();
-}
+
 
 vector<string> ConfigDialog::listModels() {
-    DIR *modelDir = opendir(this->resourceDir.toStdString().c_str());
-    struct dirent *ptr;
     vector<string> result;
-    while ((ptr = readdir(modelDir)) != nullptr) {
-        if (ptr->d_type == DT_DIR) {
-            result.emplace_back(ptr->d_name);
+    for (const auto & entry : std::filesystem::directory_iterator(this->resourceDir.toStdString())) {
+        if (entry.is_directory()) {
+            result.push_back(entry.path().filename());
         }
     }
-    closedir(modelDir);
     return result;
 }
 

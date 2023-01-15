@@ -44,9 +44,9 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
         }
     });
     trayIconMenu->addAction(showAction);
-    this->configDialog = new ConfigDialog(this);
+    this->configDialog = new ConfigDialog(STQ(this->modelName), STQ(this->resourceDir), nullptr);
     auto *configOption = new QAction("设置", this);
-    connect(configOption, &QAction::toggled, this, [this]() {
+    connect(configOption, &QAction::triggered, this, [this]() {
         this->configDialog->show();
     });
     trayIconMenu->addAction(configOption);

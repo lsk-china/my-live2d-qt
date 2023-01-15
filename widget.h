@@ -20,6 +20,8 @@
 #undef None
 #undef Status
 #undef Unsorted
+#undef min
+#undef max
 
 #include <QDebug>
 #include <QActionGroup>
@@ -36,6 +38,9 @@
 #include "configDialog.h"
 
 using namespace std;
+
+#define STQ(s) QString::fromStdString(s)
+#define QTC(s) s.toStdString().c_str()
 
 class Widget : public QWidget{
     Q_OBJECT

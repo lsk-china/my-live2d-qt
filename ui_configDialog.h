@@ -1,13 +1,13 @@
 /********************************************************************************
-** Form generated from reading UI file 'configDialognIqXJw.ui'
+** Form generated from reading UI file 'configDialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.15.6
+** Created by: Qt User Interface Compiler version 5.15.8
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef CONFIGDIALOGNIQXJW_H
-#define CONFIGDIALOGNIQXJW_H
+#ifndef UI_CONFIGDIALOG_H
+#define UI_CONFIGDIALOG_H
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
@@ -96,7 +96,7 @@ public:
 
     void retranslateUi(QDialog *Dialog)
     {
-        Dialog->setWindowTitle(QCoreApplication::translate("Dialog", "Dialog", nullptr));
+        Dialog->setWindowTitle(QCoreApplication::translate("Dialog", "Settings", nullptr));
         label->setText(QCoreApplication::translate("Dialog", "Model: ", nullptr));
         label_3->setText(QString());
         pushButton->setText(QCoreApplication::translate("Dialog", "...", nullptr));
@@ -113,4 +113,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // CONFIGDIALOGNIQXJW_H
+#endif // UI_CONFIGDIALOG_H

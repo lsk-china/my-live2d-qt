@@ -10,7 +10,9 @@
 #include <QDialog>
 #include <QAction>
 #include <QFileDialog>
-#include <dirent.h>
+
+#include <filesystem>
+#define STQ(s) QString::fromStdString(s)
 
 using namespace std;
 
@@ -21,9 +23,8 @@ namespace Ui {
 class ConfigDialog : public QDialog {
 Q_OBJECT
 public:
-    ConfigDialog(QWidget *parent = nullptr);
+    ConfigDialog(QString modelName, QString resourceDir, QWidget *parent = nullptr);
     ~ConfigDialog();
-    void showDialog(QWidget *parent, QString currentModelName, const QString& currentResourceDir);
 signals:
     void okPressed(QString modelName, QString resourceDir);
 private:
@@ -31,7 +32,6 @@ private:
     QString resourceDir;
     Ui::Dialog *ui;
     vector<string> listModels();
-    void closeDialog();
 };
 
 #endif //QDESKTOPPET_2_CMAKE_CONFIGDIALOG_H
