@@ -13,14 +13,13 @@ ConfigDialog::ConfigDialog(QString modelNameIn, QString resourceDir, QWidget *pa
     this->resourceDir = std::move(resourceDir);
     this->ui->label_3->setText(this->resourceDir);
     vector<string> models = this->listModels();
-    for (string model : models) {
+    for (const string& model : models) {
         this->ui->comboBox->addItem(STQ(model));
     }
     this->ui->comboBox->setCurrentText(this->modelName);
     connect(this->ui->pushButton_2, &QPushButton::clicked, this, [this](bool clicked) {
-        if (clicked) {
-            okPressed(this->modelName, this->resourceDir);
-        }
+        okPressed(this->modelName, this->resourceDir);
+        this->hide();
     });
     connect(this->ui->comboBox, &QComboBox::currentTextChanged, this, [this](QString model) {
         this->modelName = std::move(model);
@@ -30,6 +29,7 @@ ConfigDialog::ConfigDialog(QString modelNameIn, QString resourceDir, QWidget *pa
     });
     connect(this->ui->pushButton, &QPushButton::clicked, this, [this]() {
         this->resourceDir = QFileDialog::getExistingDirectory(this, "Choose resource directory", this->resourceDir);
+        this->ui->label_3->setText(this->resourceDir);
         this->ui->comboBox->clear();
         vector<string> models = this->listModels();
         for (string model : models) {
@@ -40,8 +40,6 @@ ConfigDialog::ConfigDialog(QString modelNameIn, QString resourceDir, QWidget *pa
     setWindowModality(Qt::WindowModality::ApplicationModal);
     setAttribute(Qt::WA_DeleteOnClose, false);
 }
-
-
 
 vector<string> ConfigDialog::listModels() {
     vector<string> result;

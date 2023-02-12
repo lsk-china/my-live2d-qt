@@ -45,6 +45,13 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
     });
     trayIconMenu->addAction(showAction);
     this->configDialog = new ConfigDialog(STQ(this->modelName), STQ(this->resourceDir), nullptr);
+    connect(this->configDialog, &ConfigDialog::okPressed, this, [this](QString modelName, QString resourceDir) {
+        this->modelName = QTS(modelName);
+        this->resourceDir = QTS(resourceDir);
+        this->widget->setResDir(this->resourceDir);
+        this->widget->setModel(this->modelName);
+        this->widget->paintGL();
+    });
     auto *configOption = new QAction("设置", this);
     connect(configOption, &QAction::triggered, this, [this]() {
         this->configDialog->show();

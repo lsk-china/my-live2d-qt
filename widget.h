@@ -41,6 +41,7 @@ using namespace std;
 
 #define STQ(s) QString::fromStdString(s)
 #define QTC(s) s.toStdString().c_str()
+#define QTS(s) s.toStdString()
 
 class Widget : public QWidget{
     Q_OBJECT

@@ -36,7 +36,7 @@ find_package(Qt5 COMPONENTS
         OpenGL
         REQUIRED)
 
-add_executable(QDesktopPet_2_cmake main.cpp)
+add_executable(QDesktopPet_2_cmake main.cpp runningCheck.cpp runningCheck.h)
 target_link_libraries(QDesktopPet_2_cmake
         Qt5::Core
         Qt5::Gui
