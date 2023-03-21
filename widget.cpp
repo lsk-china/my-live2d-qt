@@ -46,11 +46,13 @@ Widget::Widget(QWidget *parent) : QWidget(parent) {
     trayIconMenu->addAction(showAction);
     this->configDialog = new ConfigDialog(STQ(this->modelName), STQ(this->resourceDir), nullptr);
     connect(this->configDialog, &ConfigDialog::okPressed, this, [this](QString modelName, QString resourceDir) {
+        delete this->widget;
         this->modelName = QTS(modelName);
         this->resourceDir = QTS(resourceDir);
-        this->widget->setResDir(this->resourceDir);
-        this->widget->setModel(this->modelName);
-        this->widget->paintGL();
+        this->widget = new QLive2dWidget(this);
+        this->widget->resize(300, 300);
+        this->widget->move(0, this->height() - 300);
+        connect(this->widget, SIGNAL(initialized(QLive2dWidget*)), this, SLOT(live2dInitialized(QLive2dWidget*)));
     });
     auto *configOption = new QAction("设置", this);
     connect(configOption, &QAction::triggered, this, [this]() {
