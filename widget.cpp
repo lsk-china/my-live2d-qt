@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Widget::Widget(QWidget *parent) : QWidget(parent) {
+Widget::Widget(configuration configuration, QWidget *parent) : QWidget(parent) {
     // 初始化窗口，设置鼠标事件穿透
     this->setGeometry(0,
                       0,

@@ -36,6 +36,7 @@
 #include <QRect>
 
 #include "configDialog.h"
+#include "configuration.h"
 
 using namespace std;
 
@@ -46,7 +47,7 @@ using namespace std;
 class Widget : public QWidget{
     Q_OBJECT
 public:
-    explicit Widget(QWidget *newModelName = nullptr);
+    explicit Widget(configuration configuration, QWidget *newModelName = nullptr);
     ~Widget();
     void setModel(string resourceDir, string modelName);
     void setWidgetPosition(bool widgetOnLeft);

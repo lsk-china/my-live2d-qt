@@ -51,6 +51,7 @@ configuration::configuration() {
     this->hideOnHover = this->settings->value("hideOnHover", true).toBool();
     this->widgetOnLeft = this->settings->value("widgetOnLeft", true).toBool();
     this->mouseSensibility = this->settings->value("mouseSensibility", 1.0).toDouble();
+    this->widgetSize = this->settings->value("size", QSize(200, 200)).toSize();
     this->settings->endGroup();
     this->settings->beginGroup("Resource");
     this->modelName = this->settings->value("modelName", "WY6").toString();
@@ -67,9 +68,18 @@ void configuration::save() {
     this->settings->setValue("hideOnHover", this->hideOnHover);
     this->settings->setValue("widgetOnLeft", this->widgetOnLeft);
     this->settings->setValue("mouseSensibility", this->mouseSensibility);
+    this->settings->setValue("size", this->widgetSize);
     this->settings->endGroup();
     this->settings->beginGroup("Resource");
     this->settings->setValue("modelName", this->modelName);
     this->settings->setValue("resourceDir", this->resourceDir);
     this->settings->endGroup();
+}
+
+const QSize &configuration::getWidgetSize() const {
+    return widgetSize;
+}
+
+void configuration::setWidgetSize(const QSize &widgetSize) {
+    configuration::widgetSize = widgetSize;
 }

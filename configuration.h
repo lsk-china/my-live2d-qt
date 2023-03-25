@@ -7,6 +7,7 @@
 
 #include <QSettings>
 #include <QApplication>
+#include <QSize>
 
 class configuration {
 public:
@@ -35,12 +36,17 @@ public:
 
     void setMouseSensibility(double mouseSensibility);
 
+    [[nodiscard]] const QSize &getWidgetSize() const;
+
+    void setWidgetSize(const QSize &widgetSize);
+
 private:
     bool hideOnHover;
     QString resourceDir;
     QString modelName;
     bool widgetOnLeft;
     double mouseSensibility;
+    QSize widgetSize;
 
     QSettings *settings;
 };
