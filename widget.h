@@ -61,7 +61,7 @@ private:
     string resourceDir = "/data/lsk/live2d/Resources/";
     string modelName = "WY6";
     bool widgetOnLeft = true;
-    double mouseSensibility = 1.0;
+    double mouseSensibility = 0.1;
 //    vector<string> listModels();
 public slots:
     void live2dInitialized(QLive2dWidget *wid);

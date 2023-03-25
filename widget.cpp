@@ -72,7 +72,7 @@ Widget::Widget(configuration configuration, QWidget *parent) : QWidget(parent) {
     this->widget->move(0, this->height() - 300);
     connect(this->widget, SIGNAL(initialized(QLive2dWidget*)), this, SLOT(live2dInitialized(QLive2dWidget*)));
     // 开启鼠标事件监听线程
-    this->th = new MouseEventThread(this->geometry(), this->winId(), this);
+    this->th = new MouseEventThread(this->geometry(), this->winId(), this->mouseSensibility, this);
     connect(this->th, SIGNAL(mouseEvent(QPoint,QPoint)), this, SLOT(mouseEvent(QPoint,QPoint)), Qt::QueuedConnection);
     connect(this->th, &MouseEventThread::mousePress, this, &Widget::mousePress, Qt::QueuedConnection);
     connect(this->th, &MouseEventThread::mouseRelease, this, &Widget::mouseRelease, Qt::QueuedConnection);

@@ -39,7 +39,7 @@ using namespace std;
 class MouseEventThread : public QThread {
     Q_OBJECT
 public:
-    MouseEventThread(QRect screenRect, int winID, QObject *parent = nullptr);
+    MouseEventThread(QRect screenRect, int winID, double sensibility, QObject *parent = nullptr);
     ~MouseEventThread();
     static void callback(XPointer closure, XRecordInterceptData* hook);
     void processEvent(XRecordInterceptData* hook);
@@ -57,6 +57,7 @@ private:
     XRecordRange *rr;
     Window rootWindow;
     Window appWindow;
+    double sensibility;
 
 signals:
     void mouseEvent(QPoint relPosition, QPoint absPosition);

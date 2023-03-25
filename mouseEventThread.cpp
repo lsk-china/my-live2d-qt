@@ -1,6 +1,6 @@
 #include "mouseEventThread.h"
 
-MouseEventThread::MouseEventThread(QRect screenRect, int winID, QObject *parent) : QThread(parent) {
+MouseEventThread::MouseEventThread(QRect screenRect, int winID, double sensibility, QObject *parent) : QThread(parent) {
     connect(this, &QThread::finished, this, &MouseEventThread::cleanup);
     controlDisplay = XOpenDisplay(NULL);
     rootWindow = XRootWindow(controlDisplay, 0);
@@ -16,6 +16,7 @@ MouseEventThread::MouseEventThread(QRect screenRect, int winID, QObject *parent)
         qFatal("RECORD extension not supported on this X server!");
     }
     qInfo("Version of record extension: %d.%d", major, minor);
+    this->sensibility = sensibility;
 }
 
 void MouseEventThread::run() {
@@ -62,7 +63,7 @@ void MouseEventThread::processEvent(XRecordInterceptData *hook) {
                 if (queryCursor(relX, relY, absX, absY)) {
                     break;
                 }
-                emit mousePress(QPoint(relX, relY), QPoint(absX, absY));
+                emit mousePress(QPoint(relX * sensibility, relY * sensibility), QPoint(absX * sensibility, absY * sensibility));
             }
             break;
         case ButtonRelease:
@@ -70,14 +71,14 @@ void MouseEventThread::processEvent(XRecordInterceptData *hook) {
                 if (queryCursor(relX, relY, absX, absY)) {
                     break;
                 }
-                emit mouseRelease(QPoint(relX, relY), QPoint(absX, absY));
+                emit mouseRelease(QPoint(relX * sensibility, relY * sensibility), QPoint(absX * sensibility, absY * sensibility));
             }
             break;
         case MotionNotify:
             if (queryCursor(relX, relY, absX, absY)) {
                 break;
             }
-            emit mouseEvent(QPoint(relX, relY), QPoint(absX, absY));
+            emit mouseEvent(QPoint(relX * sensibility, relY * sensibility), QPoint(absX * sensibility, absY * sensibility));
             break;
     }
     XRecordFreeData (hook);
