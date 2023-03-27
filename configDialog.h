@@ -10,7 +10,7 @@
 #include <QDialog>
 #include <QAction>
 #include <QFileDialog>
-
+#include "configuration.h"
 #include <filesystem>
 #define STQ(s) QString::fromStdString(s)
 
@@ -23,15 +23,14 @@ namespace Ui {
 class ConfigDialog : public QDialog {
 Q_OBJECT
 public:
-    ConfigDialog(QString modelName, QString resourceDir, QWidget *parent = nullptr);
+    ConfigDialog(configuration currentConfiguration, QWidget *parent = nullptr);
     ~ConfigDialog();
 signals:
-    void okPressed(QString modelName, QString resourceDir);
+    void okPressed(configuration result);
 private:
-    QString modelName;
-    QString resourceDir;
     Ui::Dialog *ui;
     vector<string> listModels();
+    configuration currentConfiguration;
 };
 
 #endif //QDESKTOPPET_2_CMAKE_CONFIGDIALOG_H

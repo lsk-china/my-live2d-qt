@@ -55,13 +55,9 @@ private:
     QLive2dWidget *widget;
     MouseEventThread *th;
     bool initialized = false;
-    bool hideOnHover = true;
     bool shouldShow = true;
     ConfigDialog *configDialog;
-    string resourceDir = "/data/lsk/live2d/Resources/";
-    string modelName = "WY6";
-    bool widgetOnLeft = true;
-    double mouseSensibility = 0.1;
+    configuration currentConfiguration;
 //    vector<string> listModels();
 public slots:
     void live2dInitialized(QLive2dWidget *wid);

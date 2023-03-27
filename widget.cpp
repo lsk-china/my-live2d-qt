@@ -21,6 +21,7 @@ Widget::Widget(configuration configuration, QWidget *parent) : QWidget(parent) {
     XShapeCombineRectangles(QX11Info::display(),
                             this->winId(),
                             ShapeInput, 0, 0, nullptr, 0, ShapeSet, YXBanded);
+    this->currentConfiguration = configuration;
     // 菜单初始化
     auto *icon = new QSystemTrayIcon(this);
     icon->setToolTip("Live2d");
@@ -30,7 +31,7 @@ Widget::Widget(configuration configuration, QWidget *parent) : QWidget(parent) {
     enableHideOnHoverAction->setCheckable(true);
     enableHideOnHoverAction->setChecked(true);
     connect(enableHideOnHoverAction, &QAction::toggled, this, [this](bool checked) {
-       this->hideOnHover = checked;
+       this->currentConfiguration.setHideOnHover(checked);
     });
     trayIconMenu->addAction(enableHideOnHoverAction);
     auto *showAction = new QAction("显示", this);
@@ -44,15 +45,19 @@ Widget::Widget(configuration configuration, QWidget *parent) : QWidget(parent) {
         }
     });
     trayIconMenu->addAction(showAction);
-    this->configDialog = new ConfigDialog(STQ(this->modelName), STQ(this->resourceDir), nullptr);
-    connect(this->configDialog, &ConfigDialog::okPressed, this, [this](QString modelName, QString resourceDir) {
-        delete this->widget;
-        this->modelName = QTS(modelName);
-        this->resourceDir = QTS(resourceDir);
-        this->widget = new QLive2dWidget(this);
-        this->widget->resize(300, 300);
-        this->widget->move(0, this->height() - 300);
-        connect(this->widget, SIGNAL(initialized(QLive2dWidget*)), this, SLOT(live2dInitialized(QLive2dWidget*)));
+    this->configDialog = new ConfigDialog(this->currentConfiguration, nullptr);
+//    connect(this->configDialog, &ConfigDialog::okPressed, this, [this](QString modelName, QString resourceDir) {
+//        delete this->widget;
+//        this->modelName = QTS(modelName);
+//        this->resourceDir = QTS(resourceDir);
+//        this->widget = new QLive2dWidget(this);
+//        this->widget->resize(300, 300);
+//        this->widget->move(0, this->height() - 300);
+//        connect(this->widget, SIGNAL(initialized(QLive2dWidget*)), this, SLOT(live2dInitialized(QLive2dWidget*)));
+//    });
+    connect(this->configDialog, &ConfigDialog::okPressed, this, [this](class configuration conf) {
+        this->currentConfiguration = conf;
+
     });
     auto *configOption = new QAction("设置", this);
     connect(configOption, &QAction::triggered, this, [this]() {
@@ -72,12 +77,11 @@ Widget::Widget(configuration configuration, QWidget *parent) : QWidget(parent) {
     this->widget->move(0, this->height() - 300);
     connect(this->widget, SIGNAL(initialized(QLive2dWidget*)), this, SLOT(live2dInitialized(QLive2dWidget*)));
     // 开启鼠标事件监听线程
-    this->th = new MouseEventThread(this->geometry(), this->winId(), this->mouseSensibility, this);
+    this->th = new MouseEventThread(this->geometry(), this->winId(), this->currentConfiguration.getMouseSensibility(), this);
     connect(this->th, SIGNAL(mouseEvent(QPoint,QPoint)), this, SLOT(mouseEvent(QPoint,QPoint)), Qt::QueuedConnection);
     connect(this->th, &MouseEventThread::mousePress, this, &Widget::mousePress, Qt::QueuedConnection);
     connect(this->th, &MouseEventThread::mouseRelease, this, &Widget::mouseRelease, Qt::QueuedConnection);
     this->th->start();
-
     connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, [this]() {this->th->exit();});
 }
 
@@ -90,23 +94,10 @@ Widget::~Widget() {
     this->configDialog = nullptr;
 }
 
-//vector<string> Widget::listModels() {
-//    DIR *modelDir = opendir(this->resourceDir.c_str());
-//    struct dirent *ptr;
-//    vector<string> result;
-//    while ((ptr = readdir(modelDir)) != nullptr) {
-//        if (ptr->d_type == DT_DIR) {
-//            result.emplace_back(ptr->d_name);
-//        }
-//    }
-//    closedir(modelDir);
-//    return result;
-//}
-
 void Widget::live2dInitialized(QLive2dWidget *wid) {
-    cout << "Starting with model " << this->modelName << " in " << this->resourceDir << "." << endl;
-    wid->setResDir(this->resourceDir);
-    widget->setModel(this->modelName);
+    cout << "Starting with model " << this->currentConfiguration.getModelName().toStdString() << " in " << this->currentConfiguration.getResourceDir().toStdString() << "." << endl;
+    wid->setResDir(this->currentConfiguration.getResourceDir().toStdString());
+    wid->setModel(this->currentConfiguration.getModelName().toStdString());
     this->initialized = true;
 }
 void Widget::mouseEvent(QPoint rel, QPoint abs) {
@@ -114,7 +105,7 @@ void Widget::mouseEvent(QPoint rel, QPoint abs) {
     //cout<<"abs: "<<abs.x()<<", "<<abs.y()<<endl;
     widget->mouseMove(rel);
     //widget->mouseMove(rel);
-    if (this->hideOnHover) {
+    if (this->currentConfiguration.isHideOnHover()) {
         if (widget->geometry().contains(rel) && widget->isVisible()) {
             widget->hide();
         }
@@ -125,8 +116,8 @@ void Widget::mouseEvent(QPoint rel, QPoint abs) {
 }
 
 void Widget::setModel(std::string resourceDir, std::string modelName) {
-    this->resourceDir = resourceDir;
-    this->modelName = modelName;
+    this->currentConfiguration.setResourceDir(QString::fromStdString(resourceDir));
+    this->currentConfiguration.setModelName(QString::fromStdString(modelName));
 }
 
 void Widget::setWidgetPosition(bool widgetOnLeft) {
@@ -140,7 +131,7 @@ void Widget::mousePress(QPoint rel, QPoint abs) {
         return;
     }
     if (this->widget->geometry().contains(rel)) {
-        if (widgetOnLeft) {
+        if (this->currentConfiguration.isHideOnHover()) {
             this->widget->mousePress(QPoint(rel.x(), this->height() - rel.y()));
         } else {
             int spaceBetweenLeftAndWidget = this->width() - this->widget->width();
@@ -154,7 +145,7 @@ void Widget::mouseRelease(QPoint rel, QPoint abs) {
         return;
     }
     if (this->widget->geometry().contains(rel)) {
-        if (widgetOnLeft) {
+        if (this->currentConfiguration.isHideOnHover()) {
             this->widget->mouseRelease(QPoint(rel.x(), this->height() - rel.y()));
         } else {
             int spaceBetweenLeftAndWidget = this->width() - this->widget->width();
