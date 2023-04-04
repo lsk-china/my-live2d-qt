@@ -57,7 +57,11 @@ Widget::Widget(configuration configuration, QWidget *parent) : QWidget(parent) {
 //    });
     connect(this->configDialog, &ConfigDialog::okPressed, this, [this](class configuration conf) {
         this->currentConfiguration = conf;
-
+        delete this->widget;
+        this->widget = new QLive2dWidget(this);
+        this->widget->resize(300, 300);
+        this->widget->move(0, this->height() - 300);
+        connect(this->widget, SIGNAL(initialized(QLive2dWidget*)), this, SLOT(live2dInitialized(QLive2dWidget*)));
     });
     auto *configOption = new QAction("设置", this);
     connect(configOption, &QAction::triggered, this, [this]() {

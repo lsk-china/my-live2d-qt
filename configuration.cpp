@@ -60,7 +60,7 @@ configuration::configuration() {
 }
 
 configuration::~configuration() {
-    delete this->settings;
+//    delete this->settings;
 }
 
 void configuration::save() {

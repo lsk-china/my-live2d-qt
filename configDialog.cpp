@@ -42,8 +42,10 @@ ConfigDialog::ConfigDialog(configuration currentConfiguration, QWidget *parent) 
         this->ui->comboBox->addItem(STQ(model));
     }
     this->ui->comboBox->setCurrentText(this->currentConfiguration.getModelName());
+    this->ui->label_3->setText(this->currentConfiguration.getResourceDir());
     connect(this->ui->pushButton_2, &QPushButton::clicked, this, [this](bool clicked) {
         emit okPressed(this->currentConfiguration);
+        this->currentConfiguration.save();
         this->hide();
     });
     connect(this->ui->comboBox, &QComboBox::currentTextChanged, this, [this](QString model) {
@@ -53,7 +55,11 @@ ConfigDialog::ConfigDialog(configuration currentConfiguration, QWidget *parent) 
         this->hide();
     });
     connect(this->ui->pushButton, &QPushButton::clicked, this, [this]() {
-        this->currentConfiguration.setResourceDir(QFileDialog::getExistingDirectory(this, "Choose resource directory", this->currentConfiguration.getResourceDir()));
+        QString selectedDir = QFileDialog::getExistingDirectory(this, "Choose resource directory", this->currentConfiguration.getResourceDir());
+        if (selectedDir.isEmpty()) {
+            return;
+        }
+        this->currentConfiguration.setResourceDir(selectedDir);
         this->ui->label_3->setText(this->currentConfiguration.getResourceDir());
         vector<string> models = this->listModels();
         for (const string& model : models) {
@@ -67,7 +73,7 @@ ConfigDialog::ConfigDialog(configuration currentConfiguration, QWidget *parent) 
 
 vector<string> ConfigDialog::listModels() {
     vector<string> result;
-    for (const auto & entry : std::filesystem::directory_iterator(this->currentConfiguration.getModelName().toStdString())) {
+    for (const auto & entry : std::filesystem::directory_iterator(this->currentConfiguration.getResourceDir().toStdString())) {
         if (entry.is_directory()) {
             result.push_back(entry.path().filename());
         }
