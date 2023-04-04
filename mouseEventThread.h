@@ -58,6 +58,7 @@ private:
     Window rootWindow;
     Window appWindow;
     double sensibility;
+//    int dx, dy, lastx, lasty = 0;
 
 signals:
     void mouseEvent(QPoint relPosition, QPoint absPosition);

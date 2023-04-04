@@ -78,6 +78,13 @@ void MouseEventThread::processEvent(XRecordInterceptData *hook) {
             if (queryCursor(relX, relY, absX, absY)) {
                 break;
             }
+//            dx = lastx - relX;
+//            dy = lasty - relY;
+//            lastx = relX, lasty = relY;
+//            if (abs(dx) < 10 || abs(dy) < 10) {
+//                qDebug() << "motion too small, ignoring...";
+//                break;
+//            }
             emit mouseEvent(QPoint(relX * sensibility, relY * sensibility), QPoint(absX * sensibility, absY * sensibility));
             break;
     }
