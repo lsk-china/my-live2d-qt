@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>670</width>
-    <height>140</height>
+    <height>232</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>0</x>
      <y>0</y>
      <width>671</width>
-     <height>86</height>
+     <height>172</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -35,6 +35,26 @@
     </item>
     <item row="0" column="1">
      <widget class="QComboBox" name="comboBox"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="labelWidgetSize">
+      <property name="text">
+       <string>Widget Size:</string>
+      </property>
+      <property name="margin">
+       <number>10</number>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>ResourcesDir: </string>
+      </property>
+      <property name="margin">
+       <number>10</number>
+      </property>
+     </widget>
     </item>
     <item row="1" column="1">
      <layout class="QHBoxLayout" name="horizontalLayout">
@@ -65,23 +85,53 @@
       </item>
      </layout>
     </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>ResourcesDir: </string>
-      </property>
-      <property name="margin">
-       <number>10</number>
-      </property>
-     </widget>
+    <item row="2" column="1">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QSpinBox" name="widgetHeight">
+        <property name="minimum">
+         <number>200</number>
+        </property>
+        <property name="maximum">
+         <number>10000</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="labelX">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>x</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="widgetWidth">
+        <property name="minimum">
+         <number>200</number>
+        </property>
+        <property name="maximum">
+         <number>10000</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
   <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
-     <x>560</x>
-     <y>100</y>
+     <x>540</x>
+     <y>190</y>
      <width>106</width>
      <height>35</height>
     </rect>
@@ -93,8 +143,8 @@
   <widget class="QPushButton" name="pushButton_3">
    <property name="geometry">
     <rect>
-     <x>430</x>
-     <y>100</y>
+     <x>410</x>
+     <y>190</y>
      <width>106</width>
      <height>35</height>
     </rect>

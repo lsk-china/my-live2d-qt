@@ -66,7 +66,7 @@ ConfigDialog::ConfigDialog(configuration currentConfiguration, QWidget *parent) 
             this->ui->comboBox->addItem(QString::fromStdString(model));
         }
     });
-    resize(670, 140);
+    resize(670, 232);
     setWindowModality(Qt::WindowModality::ApplicationModal);
     setAttribute(Qt::WA_DeleteOnClose, false);
 }
