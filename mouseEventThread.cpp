@@ -129,3 +129,7 @@ void MouseEventThread::cleanup() {
         XCloseDisplay(dataDisplay);
     }
 }
+
+void MouseEventThread::setMouseSensibility(double mouseSensibility) {
+    this->sensibility = sensibility;
+}

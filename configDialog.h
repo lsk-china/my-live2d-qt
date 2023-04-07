@@ -28,6 +28,7 @@ public:
 signals:
     void okPressed(configuration result);
 private:
+    void reloadMouseSensibilityValue();
     Ui::Dialog *ui;
     vector<string> listModels();
     configuration currentConfiguration;

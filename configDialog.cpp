@@ -10,6 +10,8 @@ ConfigDialog::ConfigDialog(configuration currentConfiguration, QWidget *parent) 
     this->ui = new Ui::Dialog();
     this->ui->setupUi(this);
     this->currentConfiguration = currentConfiguration;
+    this->ui->mouseSensibility->setValue(currentConfiguration.getMouseSensibility() * 10);
+    this->reloadMouseSensibilityValue();
     vector<string> models = this->listModels();
     for (const string& model : models) {
         this->ui->comboBox->addItem(STQ(model));
@@ -47,7 +49,11 @@ ConfigDialog::ConfigDialog(configuration currentConfiguration, QWidget *parent) 
             this->ui->comboBox->addItem(QString::fromStdString(model));
         }
     });
-    resize(670, 232);
+    connect(this->ui->mouseSensibility, &QSlider::valueChanged, this, [this](int num) {
+        this->currentConfiguration.setMouseSensibility(num / 10.0);
+        this->reloadMouseSensibilityValue();
+    });
+    resize(680, 253);
     setWindowModality(Qt::WindowModality::ApplicationModal);
     setAttribute(Qt::WA_DeleteOnClose, false);
 }
@@ -66,4 +72,9 @@ ConfigDialog::~ConfigDialog() noexcept {
     delete ui;
     ui = nullptr;
     this->currentConfiguration.save();
+}
+
+void ConfigDialog::reloadMouseSensibilityValue() {
+    double sensibility = this->currentConfiguration.getMouseSensibility();
+    this->ui->mouseSensibilityValue->setText(QString::fromStdString(to_string(sensibility)));
 }

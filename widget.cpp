@@ -48,10 +48,11 @@ Widget::Widget(configuration configuration, QWidget *parent) : QWidget(parent) {
     this->configDialog = new ConfigDialog(this->currentConfiguration, nullptr);
     connect(this->configDialog, &ConfigDialog::okPressed, this, [this](class configuration conf) {
         this->currentConfiguration = conf;
+        this->th->setMouseSensibility(conf.getMouseSensibility());
         delete this->widget;
         this->widget = new QLive2dWidget(this);
         this->widget->resize(currentConfiguration.getWidgetSize());
-        this->widget->move(0, this->height() - 300);
+        this->widget->move(0, this->height() - this->widget->height());
         connect(this->widget, SIGNAL(initialized(QLive2dWidget*)), this, SLOT(live2dInitialized(QLive2dWidget*)));
     });
     auto *configOption = new QAction("设置", this);

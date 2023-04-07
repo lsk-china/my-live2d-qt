@@ -44,12 +44,14 @@ public:
     static void callback(XPointer closure, XRecordInterceptData* hook);
     void processEvent(XRecordInterceptData* hook);
     int queryCursor(int &relX, int &relY, int &absX, int &absY);
+    void setMouseSensibility(double mouseSensibility);
 
 public slots:
     void cleanup();
 
 private:
     void run() override;
+
 
     Display *controlDisplay;
     Display *dataDisplay;
@@ -59,7 +61,6 @@ private:
     Window appWindow;
     double sensibility;
 //    int dx, dy, lastx, lasty = 0;
-
 signals:
     void mouseEvent(QPoint relPosition, QPoint absPosition);
     void mousePress(QPoint relPosition, QPoint absPosition);
