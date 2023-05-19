@@ -62,9 +62,9 @@ private:
     double sensibility;
 //    int dx, dy, lastx, lasty = 0;
 signals:
-    void mouseEvent(QPoint relPosition, QPoint absPosition);
-    void mousePress(QPoint relPosition, QPoint absPosition);
-    void mouseRelease(QPoint relPosition, QPoint absPosition);
+    void mouseEvent(QPoint relPosition, QPoint rawPosition);
+    void mousePress(QPoint relPosition, QPoint rawPosition);
+    void mouseRelease(QPoint relPosition, QPoint rawPosition);
 };
 
 

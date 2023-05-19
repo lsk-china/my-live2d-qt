@@ -96,16 +96,16 @@ void Widget::live2dInitialized(QLive2dWidget *wid) {
     wid->setModel(this->currentConfiguration.getModelName().toStdString());
     this->initialized = true;
 }
-void Widget::mouseEvent(QPoint rel, QPoint abs) {
+void Widget::mouseEvent(QPoint rel, QPoint raw) {
     //cout<<"rel: "<<rel.x()<<", "<<rel.y()<<endl;
-    //cout<<"abs: "<<abs.x()<<", "<<abs.y()<<endl;
+    //cout<<"abs: "<<raw.x()<<", "<<raw.y()<<endl;
     widget->mouseMove(rel);
     //widget->mouseMove(rel);
     if (this->currentConfiguration.isHideOnHover()) {
-        if (widget->geometry().contains(rel) && widget->isVisible()) {
+        if (widget->geometry().contains(raw) && widget->isVisible()) {
             widget->hide();
         }
-        if (!widget->geometry().contains(rel) && !widget->isVisible()) {
+        if (!widget->geometry().contains(raw) && !widget->isVisible()) {
             widget->show();
         }
     }
@@ -122,10 +122,7 @@ void Widget::setWidgetPosition(bool widgetOnLeft) {
     }
 }
 
-void Widget::mousePress(QPoint rel, QPoint abs) {
-    if (!this->widget->isVisible()) {
-        return;
-    }
+void Widget::mousePress(QPoint rel, QPoint raw) {
     if (this->widget->geometry().contains(rel)) {
         if (this->currentConfiguration.isHideOnHover()) {
             this->widget->mousePress(QPoint(rel.x(), this->height() - rel.y()));
@@ -136,10 +133,7 @@ void Widget::mousePress(QPoint rel, QPoint abs) {
     }
 }
 
-void Widget::mouseRelease(QPoint rel, QPoint abs) {
-    if (!this->widget->isVisible()) {
-        return;
-    }
+void Widget::mouseRelease(QPoint rel, QPoint raw) {
     if (this->widget->geometry().contains(rel)) {
         if (this->currentConfiguration.isHideOnHover()) {
             this->widget->mouseRelease(QPoint(rel.x(), this->height() - rel.y()));

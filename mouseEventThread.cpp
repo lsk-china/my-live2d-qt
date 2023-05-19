@@ -63,7 +63,7 @@ void MouseEventThread::processEvent(XRecordInterceptData *hook) {
                 if (queryCursor(relX, relY, absX, absY)) {
                     break;
                 }
-                emit mousePress(QPoint(relX * sensibility, relY * sensibility), QPoint(absX * sensibility, absY * sensibility));
+                emit mousePress(QPoint(relX * sensibility, relY * sensibility), QPoint(relX, relY));
             }
             break;
         case ButtonRelease:
@@ -71,7 +71,7 @@ void MouseEventThread::processEvent(XRecordInterceptData *hook) {
                 if (queryCursor(relX, relY, absX, absY)) {
                     break;
                 }
-                emit mouseRelease(QPoint(relX * sensibility, relY * sensibility), QPoint(absX * sensibility, absY * sensibility));
+                emit mouseRelease(QPoint(relX * sensibility, relY * sensibility), QPoint(relX, relY));
             }
             break;
         case MotionNotify:
@@ -85,7 +85,7 @@ void MouseEventThread::processEvent(XRecordInterceptData *hook) {
 //                qDebug() << "motion too small, ignoring...";
 //                break;
 //            }
-            emit mouseEvent(QPoint(relX * sensibility, relY * sensibility), QPoint(absX * sensibility, absY * sensibility));
+            emit mouseEvent(QPoint(relX * sensibility, relY * sensibility), QPoint(relX, relY));
             break;
     }
     XRecordFreeData (hook);
