@@ -91,14 +91,13 @@ Widget::~Widget() {
 }
 
 void Widget::live2dInitialized(QLive2dWidget *wid) {
-    cout << "Starting with model " << this->currentConfiguration.getModelName().toStdString() << " in " << this->currentConfiguration.getResourceDir().toStdString() << "." << endl;
+    cout << "Starting Live2D Widget with configuration: " << endl;
+    cout << QTS(this->currentConfiguration.toString());
     wid->setResDir(this->currentConfiguration.getResourceDir().toStdString());
     wid->setModel(this->currentConfiguration.getModelName().toStdString());
     this->initialized = true;
 }
 void Widget::mouseEvent(QPoint rel, QPoint raw) {
-    //cout<<"rel: "<<rel.x()<<", "<<rel.y()<<endl;
-    //cout<<"abs: "<<raw.x()<<", "<<raw.y()<<endl;
     widget->mouseMove(rel);
     //widget->mouseMove(rel);
     if (this->currentConfiguration.isHideOnHover()) {

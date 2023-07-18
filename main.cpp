@@ -2,24 +2,18 @@
 #include "runningCheck.h"
 #include "configuration.h"
 #include <QApplication>
-#include <string.h>
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
+    configuration config;
+    Widget w(config);
+    QObject::connect(&a, &QApplication::aboutToQuit, &w, []() {
+        deleteLock();
+    });
     if (check()) {
         std::perror("already running!");
         return -1;
     }
-    configuration config;
-    Widget w(config);
-//    cout << "argc: " << argc << endl;
-//    if (argc == 3) {
-//        w.setModel(argv[1], argv[2]);
-//    }
-//    if (argc == 4) {
-//        w.setModel(argv[1], argv[2]);
-//        w.setWidgetPosition(strcmp("left", argv[3]) == 0);
-//    }
     w.show();
     return QApplication::exec();
 }

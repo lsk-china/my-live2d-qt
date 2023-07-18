@@ -9,6 +9,9 @@
 #include <QApplication>
 #include <QSize>
 
+#define B2S(boolean) QString(boolean ? "true" : "false")
+#define N2S(number) QString("%1").arg(number)
+
 class configuration {
 public:
     configuration();
@@ -39,6 +42,8 @@ public:
     [[nodiscard]] const QSize &getWidgetSize() const;
 
     void setWidgetSize(const QSize &widgetSize);
+
+    QString toString();
 
 private:
     bool hideOnHover;

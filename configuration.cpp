@@ -83,3 +83,15 @@ const QSize &configuration::getWidgetSize() const {
 void configuration::setWidgetSize(const QSize &widgetSize) {
     configuration::widgetSize = widgetSize;
 }
+
+QString configuration::toString() {
+    QString result = "";
+    result += QString("HideOnHover: ") + B2S(this->isHideOnHover()) + '\n';
+    result += QString("WidgetOnLeft: ") + B2S(this->isWidgetOnLeft()) + '\n';
+    result += QString("MouseSensibility: ") + N2S(this->getMouseSensibility()) + '\n';
+    result += QString("WidgetHeight: ") + N2S(this->getWidgetSize().height()) + '\n';
+    result += QString("WidgetWidth: ") + N2S(this->getWidgetSize().width()) + '\n';
+    result += QString("ModelName: ") + this->getModelName() + '\n';
+    result += QString("ResourceDir: ") + this->getResourceDir() + '\n';
+    return result;
+}
