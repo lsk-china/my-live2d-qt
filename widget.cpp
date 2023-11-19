@@ -37,15 +37,17 @@ Widget::Widget(configuration configuration, QWidget *parent) : QWidget(parent) {
     auto *showAction = new QAction("显示", this);
     showAction->setCheckable(true);
     showAction->setChecked(true);
-    connect(showAction, &QAction::toggled, this, [this](bool checked){
+    connect(showAction, &QAction::toggled, this, [this, trayIconMenu](bool checked){
         if (checked) {
             this->show();
+            trayIconMenu->setIcon(QIcon::fromTheme("show_table_row"));
         } else {
             this->hide();
+            trayIconMenu->setIcon(QIcon::fromTheme("hide_table_row"));
         }
     });
     trayIconMenu->addAction(showAction);
-    this->configDialog = new ConfigDialog(this->currentConfiguration, nullptr);
+    this->configDialog = new ConfigDialog(this->currentConfiguration, false, nullptr);
     connect(this->configDialog, &ConfigDialog::okPressed, this, [this](class configuration conf) {
         this->currentConfiguration = conf;
         this->th->setMouseSensibility(conf.getMouseSensibility());
@@ -69,6 +71,7 @@ Widget::Widget(configuration configuration, QWidget *parent) : QWidget(parent) {
     icon->show();
     // Live2d组件初始化
     this->widget = new QLive2dWidget(this);
+    qDebug() << this->currentConfiguration.getWidgetSize();
     this->widget->resize(currentConfiguration.getWidgetSize());
     this->widget->move(0, this->height() - this->widget->height());
     connect(this->widget, SIGNAL(initialized(QLive2dWidget*)), this, SLOT(live2dInitialized(QLive2dWidget*)));

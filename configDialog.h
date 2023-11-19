@@ -12,6 +12,7 @@
 #include <QFileDialog>
 #include "configuration.h"
 #include <filesystem>
+#include <QDebug>
 #define STQ(s) QString::fromStdString(s)
 
 using namespace std;
@@ -23,8 +24,9 @@ namespace Ui {
 class ConfigDialog : public QDialog {
 Q_OBJECT
 public:
-    ConfigDialog(configuration currentConfiguration, QWidget *parent = nullptr);
+    ConfigDialog(configuration currentConfiguration, bool firstRun, QWidget *parent = nullptr);
     ~ConfigDialog();
+    configuration getConfiguration();
 signals:
     void okPressed(configuration result);
 private:

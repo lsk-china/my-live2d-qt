@@ -31,7 +31,7 @@ bool check() {
         // if the lock file exists, there are 2 situations:
         //  1. another process is running
         //  2. another process didn't exit properly and didn't delete the lock file
-        // So we need to check if the pid in the lock file is exists and represents a QDesktopPet instance.
+        // So we need to check if the pid in the lock file exists and represents a QDesktopPet instance.
         if (!lockFile.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Truncate)) {
             QMessageBox::critical(nullptr, "Error", "Cannot open lock file!");
             QCoreApplication::exit(1);

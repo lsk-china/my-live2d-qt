@@ -6,20 +6,31 @@
 
 #include <utility>
 
-ConfigDialog::ConfigDialog(configuration currentConfiguration, QWidget *parent) : QDialog(parent) {
+ConfigDialog::ConfigDialog(configuration currentConfiguration, bool firstRun, QWidget *parent) : QDialog(parent) {
     this->ui = new Ui::Dialog();
     this->ui->setupUi(this);
-    this->currentConfiguration = currentConfiguration;
-    this->ui->mouseSensibility->setValue(currentConfiguration.getMouseSensibility() * 10);
-    this->reloadMouseSensibilityValue();
-    vector<string> models = this->listModels();
-    for (const string& model : models) {
-        this->ui->comboBox->addItem(STQ(model));
+    if (!firstRun) {
+        this->currentConfiguration = currentConfiguration;
+        this->ui->mouseSensibility->setValue(currentConfiguration.getMouseSensibility() * 10);
+        this->reloadMouseSensibilityValue();
+        vector<string> models = this->listModels();
+        for (const string& model : models) {
+            this->ui->comboBox->addItem(STQ(model));
+        }
+        this->ui->comboBox->setCurrentText(this->currentConfiguration.getModelName());
+        this->ui->label_3->setText(this->currentConfiguration.getResourceDir());
+        this->ui->widgetHeight->setValue(this->currentConfiguration.getWidgetSize().height());
+        this->ui->widgetWidth->setValue(this->currentConfiguration.getWidgetSize().width());
+        for (QAbstractButton *btn : this->ui->buttonGroup->buttons()) {
+            if (btn->text() == "Left" && this->currentConfiguration.isWidgetOnLeft() ||
+                btn->text() == "Right" && ! this->currentConfiguration.isWidgetOnLeft()
+                    ) {
+                btn->setChecked(true);
+            }
+        }
+    } else {
+        this->currentConfiguration = configuration();
     }
-    this->ui->comboBox->setCurrentText(this->currentConfiguration.getModelName());
-    this->ui->label_3->setText(this->currentConfiguration.getResourceDir());
-    this->ui->widgetHeight->setValue(this->currentConfiguration.getWidgetSize().height());
-    this->ui->widgetWidth->setValue(this->currentConfiguration.getWidgetSize().width());
     connect(this->ui->pushButton_2, &QPushButton::clicked, this, [this](bool clicked) {
         int height = this->ui->widgetHeight->value();
         int width = this->ui->widgetWidth->value();
@@ -49,11 +60,15 @@ ConfigDialog::ConfigDialog(configuration currentConfiguration, QWidget *parent) 
             this->ui->comboBox->addItem(QString::fromStdString(model));
         }
     });
+    connect(this->ui->buttonGroup, &QButtonGroup::idToggled, this, [this](int btnId, bool stat) {
+        QAbstractButton *toggledButton = this->ui->buttonGroup->button(btnId);
+        this->currentConfiguration.setWidgetOnLeft(toggledButton->text() == "Left");
+    });
     connect(this->ui->mouseSensibility, &QSlider::valueChanged, this, [this](int num) {
         this->currentConfiguration.setMouseSensibility(num / 10.0);
         this->reloadMouseSensibilityValue();
     });
-    resize(680, 253);
+    resize(670, 319);
     setWindowModality(Qt::WindowModality::ApplicationModal);
     setAttribute(Qt::WA_DeleteOnClose, false);
 }
@@ -77,4 +92,12 @@ ConfigDialog::~ConfigDialog() noexcept {
 void ConfigDialog::reloadMouseSensibilityValue() {
     double sensibility = this->currentConfiguration.getMouseSensibility();
     this->ui->mouseSensibilityValue->setText(QString::fromStdString(to_string(sensibility)));
+}
+
+configuration ConfigDialog::getConfiguration() {
+    QEventLoop eventLoop;
+    connect(this->ui->pushButton_2, &QPushButton::clicked, &eventLoop, &QEventLoop::quit);
+    this->show();
+    eventLoop.exec();
+    return this->currentConfiguration;
 }

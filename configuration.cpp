@@ -45,7 +45,7 @@ void configuration::setMouseSensibility(double mouseSensibility) {
 }
 
 configuration::configuration() {
-
+    // first run check
     this->settings = new QSettings(QSettings::UserScope, "lsk", "QDesktopPet");
     this->settings->beginGroup("Widget");
     this->hideOnHover = this->settings->value("hideOnHover", true).toBool();
@@ -55,7 +55,7 @@ configuration::configuration() {
     this->settings->endGroup();
     this->settings->beginGroup("Resource");
     this->modelName = this->settings->value("modelName", "WY6").toString();
-    this->resourceDir = this->settings->value("resourceDir", "/data/lsk/live2d/Resources/").toString();
+    this->resourceDir = this->settings->value("resourceDir", "/data/live2dModels/").toString();
     this->settings->endGroup();
 }
 

@@ -37,6 +37,7 @@ find_package(Qt5 COMPONENTS
         REQUIRED)
 
 add_executable(QDesktopPet_2_cmake main.cpp runningCheck.cpp runningCheck.h configuration.cpp configuration.h)
+add_executable(wayland_test wayland_test.c)
 target_link_libraries(QDesktopPet_2_cmake
         Qt5::Core
         Qt5::Gui
@@ -52,6 +53,7 @@ target_link_libraries(QDesktopPet_2_cmake
         -L.
         ${PKGS_DEP_LDFLAGS}
         )
+target_link_libraries(wayland_test -lwayland-client)
 target_sources(QDesktopPet_2_cmake
         PRIVATE
         main.cpp

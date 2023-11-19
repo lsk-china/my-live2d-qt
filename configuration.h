@@ -8,6 +8,8 @@
 #include <QSettings>
 #include <QApplication>
 #include <QSize>
+#include <QFile>
+#include <QDir>
 
 #define B2S(boolean) QString(boolean ? "true" : "false")
 #define N2S(number) QString("%1").arg(number)

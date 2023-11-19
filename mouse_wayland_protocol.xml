@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol name="wayland">
+    <interface name="wl_seat" version="7">
+        <enum name="capability" bitfield="true">
+            <entry name="pointer" value="1"/>
+            <entry name="keyboard" value="2"/>
+            <entry name="touch" value="4"/>
+        </enum>
+
+        <event name="capabilities">
+            <arg name="capabilities" type="uint" enum="capability"/>
+        </event>
+
+        <event name="name" since="2">
+            <arg name="name" type="string"/>
+        </event>
+
+        <request name="get_pointer">
+            <arg name="id" type="new_id" interface="wl_pointer"/>
+        </request>
+
+        <request name="get_keyboard">
+            <arg name="id" type="new_id" interface="wl_keyboard"/>
+        </request>
+
+        <request name="get_touch">
+            <arg name="id" type="new_id" interface="wl_touch"/>
+        </request>
+
+        <request name="release" type="destructor" since="5"/>
+    </interface>
+</protocol>
