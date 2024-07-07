@@ -2,3 +2,4 @@ build*/*
 /cmake-build-debug/*
 /.err
 /ui_configDialog.h
+.idea/
